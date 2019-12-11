@@ -1,0 +1,8 @@
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\bin\Debug\netcoreapp3.1\SIS.HTTP.deps.json
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\bin\Debug\netcoreapp3.1\SIS.HTTP.dll
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\bin\Debug\netcoreapp3.1\SIS.HTTP.pdb
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\obj\Debug\netcoreapp3.1\SIS.HTTP.csprojAssemblyReference.cache
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\obj\Debug\netcoreapp3.1\SIS.HTTP.AssemblyInfoInputs.cache
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\obj\Debug\netcoreapp3.1\SIS.HTTP.AssemblyInfo.cs
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\obj\Debug\netcoreapp3.1\SIS.HTTP.dll
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.HTTP\obj\Debug\netcoreapp3.1\SIS.HTTP.pdb
