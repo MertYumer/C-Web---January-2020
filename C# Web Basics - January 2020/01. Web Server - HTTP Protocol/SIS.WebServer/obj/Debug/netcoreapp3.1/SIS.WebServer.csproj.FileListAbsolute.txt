@@ -6,3 +6,6 @@ D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - 
 D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.WebServer\obj\Debug\netcoreapp3.1\SIS.WebServer.AssemblyInfo.cs
 D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.WebServer\obj\Debug\netcoreapp3.1\SIS.WebServer.dll
 D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.WebServer\obj\Debug\netcoreapp3.1\SIS.WebServer.pdb
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.WebServer\bin\Debug\netcoreapp3.1\SIS.HTTP.dll
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.WebServer\bin\Debug\netcoreapp3.1\SIS.HTTP.pdb
+D:\Projects\C# Web - January 2020\C# Web Basics - January 2020\01. Web Server - HTTP Protocol\SIS.WebServer\obj\Debug\netcoreapp3.1\SIS.WebServer.csproj.CopyComplete

@@ -4,6 +4,10 @@
 
     public class HttpHeader
     {
+        public const string ContentType = "Content-Type";
+
+        public const string Location = "Location";
+
         public HttpHeader(string key, string value)
         {
             key.ThrowIfNullOrEmpty(nameof(key));

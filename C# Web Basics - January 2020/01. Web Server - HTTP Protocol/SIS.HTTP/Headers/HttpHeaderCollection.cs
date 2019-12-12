@@ -4,7 +4,7 @@
     using System.Linq;
 
     using Contracts;
-    using SIS.HTTP.Common;
+    using Common;
 
     public class HttpHeaderCollection : IHttpHeaderCollection
     {

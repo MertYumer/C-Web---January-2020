@@ -4,12 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+
     using Common;
     using Contracts;
     using Enums;
     using Headers;
     using Headers.Contracts;
-    using SIS.HTTP.Exceptions;
+    using Exceptions;
 
     public class HttpRequest : IHttpRequest
     {
@@ -62,13 +63,19 @@
         private void ParseRequestPath()
             => this.Path = this.Url.Split('?')[0];
 
-        private void ParseRequestHeaders(string[] plainHeaders)
+        private void ParseRequestHeaders(string[] requestLineParams)
         {
-            plainHeaders
-                .Select(header => header.Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries))
-                .ToList()
-                .ForEach(headerKeyValuePair
-                => this.Headers.AddHeader(new HttpHeader(headerKeyValuePair[0], headerKeyValuePair[1])));
+            foreach (var line in requestLineParams)
+            {
+                if (string.IsNullOrEmpty(line))
+                {
+                    throw new BadRequestException();
+                }
+
+                var headerKvp = line.Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
+                var header = new HttpHeader(headerKvp[0], headerKvp[1]);
+                Headers.AddHeader(header);
+            }
         }
 
         private void ParseCookies()
@@ -131,7 +138,7 @@
                 .Split(new[] { GlobalConstants.HttpNewLine }, StringSplitOptions.None);
 
             var requestLineParams = splitRequestContent[0]
-                .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (!this.IsValidRequestLine(requestLineParams))
             {
@@ -143,7 +150,6 @@
             this.ParseRequestPath();
 
             this.ParseRequestHeaders(splitRequestContent.Skip(1).ToArray());
-            this.ParseCookies();
 
             this.ParseRequestParameters(splitRequestContent[^1]);
         }
