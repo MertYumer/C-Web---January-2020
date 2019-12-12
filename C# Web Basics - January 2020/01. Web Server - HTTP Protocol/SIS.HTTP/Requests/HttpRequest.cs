@@ -58,7 +58,7 @@
         }
 
         private void ParseRequestUrl(string[] requestLineParams)
-            => this.Url = requestLineParams[1];
+            => this.Url = requestLineParams[1].Split('#')[0];
 
         private void ParseRequestPath()
             => this.Path = this.Url.Split('?')[0];
@@ -69,7 +69,7 @@
             {
                 if (string.IsNullOrEmpty(line))
                 {
-                    throw new BadRequestException();
+                    break;
                 }
 
                 var headerKvp = line.Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
@@ -85,15 +85,15 @@
 
         private void ParseQueryParameters()
         {
-            var parameters = this.Url
-                .Split('?', '#')[1]
-                .Split('&')
-                .Select(plainQueryParameter => plainQueryParameter.Split('='))
-                .ToList();
-
-            foreach (var parameter in parameters)
+            if (this.Url.Split('?').Length > 1)
             {
-                if (this.Url.Split('?').Length > 1)
+                var parameters = this.Url
+                    .Split('?')[1]
+                    .Split('&')
+                    .Select(plainQueryParameter => plainQueryParameter.Split('='))
+                    .ToList();
+
+                foreach (var parameter in parameters)
                 {
                     if (!this.QueryData.ContainsKey(parameter[0]))
                     {
@@ -138,6 +138,7 @@
                 .Split(new[] { GlobalConstants.HttpNewLine }, StringSplitOptions.None);
 
             var requestLineParams = splitRequestContent[0]
+                .Trim()
                 .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (!this.IsValidRequestLine(requestLineParams))

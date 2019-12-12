@@ -28,33 +28,6 @@
             this.serverRoutingTable = serverRoutingTable;
         }
 
-        public void ProcessRequest()
-        {
-            try
-            {
-                var httpRequest = this.ReadRequest();
-
-                if (httpRequest != null)
-                {
-                    Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
-
-                    var httpResponse = this.HandleRequest(httpRequest);
-
-                    this.PrepareResponse(httpResponse);
-                }
-            }
-            catch (BadRequestException bre)
-            {
-                this.PrepareResponse(new TextResult(bre.ToString(), HttpResponseStatusCode.BadRequest));
-            }
-            catch (Exception e)
-            {
-                this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
-            }
-
-            this.client.Shutdown(SocketShutdown.Both);
-        }
-
         private IHttpRequest ReadRequest()
         {
             var result = new StringBuilder();
@@ -105,6 +78,33 @@
             var byteSegemnts = httpResponse.GetBytes();
 
             this.client.Send(byteSegemnts, SocketFlags.None);
+        }
+
+        public void ProcessRequest()
+        {
+            try
+            {
+                var httpRequest = this.ReadRequest();
+
+                if (httpRequest != null)
+                {
+                    Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
+
+                    var httpResponse = this.HandleRequest(httpRequest);
+
+                    this.PrepareResponse(httpResponse);
+                }
+            }
+            catch (BadRequestException bre)
+            {
+                this.PrepareResponse(new TextResult(bre.ToString(), HttpResponseStatusCode.BadRequest));
+            }
+            catch (Exception e)
+            {
+                this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
+            }
+
+            this.client.Shutdown(SocketShutdown.Both);
         }
     }
 }
