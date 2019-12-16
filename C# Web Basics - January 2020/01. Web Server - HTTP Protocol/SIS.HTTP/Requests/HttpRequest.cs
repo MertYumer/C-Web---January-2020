@@ -40,9 +40,6 @@
         private bool IsValidRequestLine(string[] requestLineParams)
             => requestLineParams.Length == 3 && requestLineParams[2] == GlobalConstants.HttpOneProtocolFragment;
 
-        private bool IsValidRequestQueryString(string queryString, string[] queryParameters)
-            => !string.IsNullOrEmpty(queryString) && queryParameters.Length >= 1;
-
         private void ParseRequestMethod(string[] requestLineParams)
         {
             bool parseResult = Enum.TryParse(requestLineParams[0], true, out HttpRequestMethod method);
@@ -76,11 +73,6 @@
                 var header = new HttpHeader(headerKvp[0], headerKvp[1]);
                 Headers.AddHeader(header);
             }
-        }
-
-        private void ParseCookies()
-        {
-            
         }
 
         private void ParseQueryParameters()

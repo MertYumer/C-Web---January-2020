@@ -39,11 +39,6 @@
             {
                 routes[method].Add(path, func);
             }
-
-            else
-            {
-                routes[method][path] = func;
-            }
         }
 
         public bool Contains(HttpRequestMethod method, string path)
