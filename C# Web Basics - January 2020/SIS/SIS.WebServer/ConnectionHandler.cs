@@ -3,6 +3,7 @@
     using System;
     using System.Net.Sockets;
     using System.Text;
+    using System.Threading.Tasks;
 
     using HTTP.Common;
     using HTTP.Enums;
@@ -28,14 +29,41 @@
             this.serverRoutingTable = serverRoutingTable;
         }
 
-        private IHttpRequest ReadRequest()
+        public async Task ProcessRequestAsync()
+        {
+            try
+            {
+                var httpRequest = await this.ReadRequest();
+
+                if (httpRequest != null)
+                {
+                    Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
+
+                    var httpResponse = this.HandleRequest(httpRequest);
+
+                    await this.PrepareResponse(httpResponse);
+                }
+            }
+            catch (BadRequestException bre)
+            {
+                await this.PrepareResponse(new TextResult(bre.ToString(), HttpResponseStatusCode.BadRequest));
+            }
+            catch (Exception e)
+            {
+                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
+            }
+
+            this.client.Shutdown(SocketShutdown.Both);
+        }
+
+        private async Task<IHttpRequest> ReadRequest()
         {
             var result = new StringBuilder();
             var data = new ArraySegment<byte>(new byte[1024]);
 
             while (true)
             {
-                int numberOfBytesRead = this.client.Receive(data.Array, SocketFlags.None);
+                int numberOfBytesRead = await this.client.ReceiveAsync(data.Array, SocketFlags.None);
 
                 if (numberOfBytesRead == 0)
                 {
@@ -64,7 +92,7 @@
             if (!this.serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
             {
                 return new TextResult(
-                    $"Route with method {httpRequest.RequestMethod} and path \"{httpRequest.Path}\" not found.", 
+                    $"Route with method {httpRequest.RequestMethod} and path \"{httpRequest.Path}\" not found.",
                     HttpResponseStatusCode.NotFound);
             }
 
@@ -73,38 +101,11 @@
                 .Invoke(httpRequest);
         }
 
-        private void PrepareResponse(IHttpResponse httpResponse)
+        private async Task PrepareResponse(IHttpResponse httpResponse)
         {
             var byteSegemnts = httpResponse.GetBytes();
 
-            this.client.Send(byteSegemnts, SocketFlags.None);
-        }
-
-        public void ProcessRequest()
-        {
-            try
-            {
-                var httpRequest = this.ReadRequest();
-
-                if (httpRequest != null)
-                {
-                    Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
-
-                    var httpResponse = this.HandleRequest(httpRequest);
-
-                    this.PrepareResponse(httpResponse);
-                }
-            }
-            catch (BadRequestException bre)
-            {
-                this.PrepareResponse(new TextResult(bre.ToString(), HttpResponseStatusCode.BadRequest));
-            }
-            catch (Exception e)
-            {
-                this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
-            }
-
-            this.client.Shutdown(SocketShutdown.Both);
+            await this.client.SendAsync(byteSegemnts, SocketFlags.None);
         }
     }
 }

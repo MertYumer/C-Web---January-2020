@@ -9,16 +9,16 @@
     {
         public static void Main()
         {
-			var array = File
+            var array = File
                 .ReadAllText("..//..//..//TestData.txt")
-				.Split(new[] { ' ', ','}, StringSplitOptions.RemoveEmptyEntries)
-				.Select(element => int.Parse(element))
-				.ToArray();
+                .Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(element => int.Parse(element))
+                .ToArray();
 
-			Task sort = SortAlgorithm<int>.MergeSortAsync(array);
-			sort.Wait();
+            Task sort = SortAlgorithm<int>.MergeSortAsync(array);
+            sort.Wait();
 
             Console.WriteLine(string.Join(", ", array));
-		}
+        }
     }
 }
