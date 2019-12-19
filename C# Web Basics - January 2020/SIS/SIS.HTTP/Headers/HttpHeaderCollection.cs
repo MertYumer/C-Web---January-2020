@@ -33,7 +33,7 @@
             return this.httpHeaders[key];
         }
 
-        public override string ToString() 
-            => string.Join("\r\n", httpHeaders.Values.Select(header => header.ToString()));
+        public override string ToString()
+            => string.Join(GlobalConstants.HttpNewLine, httpHeaders.Values.Select(header => header.ToString()));
     }
 }

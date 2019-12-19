@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.HTTP", "SIS.HTTP\SIS.HT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.WebServer", "SIS.WebServer\SIS.WebServer.csproj", "{E0F1CB1B-4464-4A1A-83B3-5391ACE8C795}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.Demo", "SIS.Demo\SIS.Demo.csproj", "{6BF352CA-2ED8-4691-9B4C-D6C1A9FD8EAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.App", "Demo.App\Demo.App.csproj", "{C2F95FC4-8AF5-4731-9A19-5EF42B45B4C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{E0F1CB1B-4464-4A1A-83B3-5391ACE8C795}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0F1CB1B-4464-4A1A-83B3-5391ACE8C795}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0F1CB1B-4464-4A1A-83B3-5391ACE8C795}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6BF352CA-2ED8-4691-9B4C-D6C1A9FD8EAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BF352CA-2ED8-4691-9B4C-D6C1A9FD8EAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BF352CA-2ED8-4691-9B4C-D6C1A9FD8EAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BF352CA-2ED8-4691-9B4C-D6C1A9FD8EAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2F95FC4-8AF5-4731-9A19-5EF42B45B4C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2F95FC4-8AF5-4731-9A19-5EF42B45B4C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2F95FC4-8AF5-4731-9A19-5EF42B45B4C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2F95FC4-8AF5-4731-9A19-5EF42B45B4C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
