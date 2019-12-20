@@ -13,8 +13,7 @@
     using SIS.HTTP.Headers;
     using SIS.HTTP.Headers.Contracts;
     using SIS.HTTP.Requests.Contracts;
-    //using SIS.HTTP.Sessions;
-    //using SIS.HTTP.Sessions.Contracts;
+    using SIS.HTTP.Sessions.Contracts;
 
     public class HttpRequest : IHttpRequest
     {
@@ -43,6 +42,8 @@
         public IHttpCookieCollection Cookies { get; }
 
         public HttpRequestMethod RequestMethod { get; private set; }
+
+        public IHttpSession Session { get; set; }
 
         private bool IsValidRequestLine(string[] requestLineParams)
             => requestLineParams.Length == 3 && requestLineParams[2] == GlobalConstants.HttpOneProtocolFragment;

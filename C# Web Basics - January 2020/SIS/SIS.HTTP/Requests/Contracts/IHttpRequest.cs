@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
-    //using SIS.HTTP.Cookies.Contracts;
+    using SIS.HTTP.Cookies.Contracts;
     using SIS.HTTP.Enums;
     using SIS.HTTP.Headers.Contracts;
-    //using SIS.HTTP.Sessions.Contracts;
+    using SIS.HTTP.Sessions.Contracts;
 
     public interface IHttpRequest
     {
@@ -21,8 +21,8 @@
 
         HttpRequestMethod RequestMethod { get; }
 
-        //IHttpCookieCollection Cookies { get; }
+        IHttpCookieCollection Cookies { get; }
 
-        //IHttpSession Session { get; set; }
+        IHttpSession Session { get; set; }
     }
 }
