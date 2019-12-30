@@ -5,6 +5,7 @@
     using System.IO;
     using System.Runtime.CompilerServices;
 
+    using IRunes.Models;
     using SIS.HTTP.Enums;
     using SIS.HTTP.Requests.Contracts;
     using SIS.HTTP.Responses.Contracts;
@@ -32,6 +33,18 @@
         protected bool IsLoggedIn(IHttpRequest httpRequest)
         {
             return httpRequest.Session.ContainsParameter("username");
+        }
+
+        protected void SignIn(IHttpRequest httpRequest, User user)
+        {
+            httpRequest.Session.AddParameter("username", user.Username);
+            httpRequest.Session.AddParameter("email", user.Email);
+            httpRequest.Session.AddParameter("id", user.Id);
+        }
+
+        protected void SignOut(IHttpRequest httpRequest)
+        {
+            httpRequest.Session.ClearParameters();
         }
 
         protected IHttpResponse View([CallerMemberName] string view = null)
