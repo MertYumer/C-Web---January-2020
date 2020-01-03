@@ -30,7 +30,12 @@
         </header>
         <hr style="height: 2px" />
         <main>
-            {{{album}}}
+            <div>
+                <img width="900" height="620" src=@Model.AlbumCover />
+                <h2>Name: @Model.AlbumName</h2>
+                <h2>Price: @Model.AlbumPrice</h2>
+            </div>
+            <a href="/Albums/All">Back To All</a>
         </main>
         <hr style="height: 2px" />
         <footer>

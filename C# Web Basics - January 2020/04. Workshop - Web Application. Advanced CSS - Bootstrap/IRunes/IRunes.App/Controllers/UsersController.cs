@@ -29,7 +29,7 @@
 
                 if (password != confirmPassword)
                 {
-                    return Redirect("/Users/Register");
+                    return this.Redirect("/Users/Register");
                 }
 
                 var user = new User
@@ -40,9 +40,9 @@
                     Email = email
                 };
 
-                if (!IsValid(user))
+                if (!this.IsValid(user))
                 {
-                    return Redirect("/Users/Register");
+                    return this.Redirect("/Users/Register");
                 }
 
                 context.Users.Add(user);
@@ -70,7 +70,7 @@
 
                 if (userFromDb == null)
                 {
-                    return Redirect("/Users/Login");
+                    return this.Redirect("/Users/Login");
                 }
 
                 this.SignIn(httpRequest, userFromDb);
