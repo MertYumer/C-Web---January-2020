@@ -34,8 +34,18 @@
                 <img width="900" height="620" src=@Model.AlbumCover />
                 <h2>Name: @Model.AlbumName</h2>
                 <h2>Price: @Model.AlbumPrice</h2>
+
+                <div>
+                    <a href="/Tracks/Create?albumId=@Model.AlbumId">Create Track</a>
+                    <a href="/Albums/All">Back to All</a>
+                </div>
             </div>
-            <a href="/Albums/All">Back To All</a>
+            <div>
+                <h2>Tracks</h2>
+                <ul>
+                    @Model.AlbumTracks
+                </ul>
+            </div>
         </main>
         <hr style="height: 2px" />
         <footer>

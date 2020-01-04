@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using IRunes.App.Extensions;
+
     using IRunes.Data;
     using IRunes.Models;
+    using Microsoft.EntityFrameworkCore;
     using SIS.HTTP.Requests.Contracts;
     using SIS.HTTP.Responses.Contracts;
 
@@ -32,7 +33,7 @@
                     string.Join("<br/>",
                     context
                     .Albums
-                    .Select(a => a.ToHtmlAll())
+                    .Select(a => $"<div><a href=/Albums/Details?albumId={a.Id}>{a.Name}</a></div>")
                     .ToList());
                 }
 
@@ -91,8 +92,11 @@
 
             using (var context = new RunesDbContext())
             {
-                var albumId = httpRequest.QueryData["id"].ToString();
-                var albumFromDb = context.Albums.FirstOrDefault(a => a.Id == albumId);
+                var albumId = httpRequest.QueryData["albumId"].ToString();
+                var albumFromDb = context
+                    .Albums
+                    .Include(a => a.Tracks)
+                    .FirstOrDefault(a => a.Id == albumId);
 
                 if (albumFromDb == null)
                 {
@@ -100,9 +104,29 @@
                 }
 
                 this.ViewData["AlbumId"] = albumFromDb.Id;
-                this.ViewData["AlbumName"] = albumFromDb.Name;
-                this.ViewData["AlbumCover"] = albumFromDb.Cover;
+                this.ViewData["AlbumName"] = WebUtility.UrlDecode(albumFromDb.Name);
+                this.ViewData["AlbumCover"] = WebUtility.UrlDecode(albumFromDb.Cover);
                 this.ViewData["AlbumPrice"] = $"${albumFromDb.Price:f2}";
+
+                var tracks = albumFromDb.Tracks.ToList();
+                var tracksHtml = string.Empty;
+
+                if (!tracks.Any())
+                {
+                    tracksHtml = "<p>Nothing to show...</p>" +
+                                 Environment.NewLine +
+                                 "<p>This album has no tracks added yet!</p>";
+                }
+
+                else
+                {
+                    for (int i = 0; i < tracks.Count; i++)
+                    {
+                        tracksHtml += $"<li>{i + 1}. <a href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
+                    }
+                }
+
+                this.ViewData["AlbumTracks"] = tracksHtml;
 
                 return this.View();
             }
