@@ -4,40 +4,41 @@
 <head>
     <meta charset="utf-8" />
     <title>IRunes</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <body>
-    <div>
+    <div class="container-fluid">
         <header>
-            <nav>
-                <a href="#">IRunes</a>
-                <button type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span></span>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+                <a class="navbar-brand text-white" href="#">IRunes</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <div id="navbarNav">
-                    <ul>
-                        <li>
-                            <a href="/">Home</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home</a>
                         </li>
-                        <li>
-                            <a href="/Albums/All">Albums</a>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/Albums/All">Albums</a>
                         </li>
-                        <li>
-                            <a href="/Users/Logout">Logout</a>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/Users/Logout">Logout</a>
                         </li>
                     </ul>
                 </div>
             </nav>
         </header>
-        <hr style="height: 2px" />
+        <hr class="bg-success" style="height: 2px" />
         <main>
             <div>
-                <img width="900" height="620" src=@Model.AlbumCover />
+                <img width="720" height="480" src=@Model.AlbumCover />
                 <h2>Name: @Model.AlbumName</h2>
                 <h2>Price: @Model.AlbumPrice</h2>
 
-                <div>
-                    <a href="/Tracks/Create?albumId=@Model.AlbumId">Create Track</a>
-                    <a href="/Albums/All">Back to All</a>
+                <div class="d-flex justify-content-around">
+                    <a class="btn btn-success" href="/Tracks/Create?albumId=@Model.AlbumId">Create Track</a>
+                    <a class="btn btn-success" href="/Albums/All">Back to All</a>
                 </div>
             </div>
             <div>
@@ -47,9 +48,9 @@
                 </ul>
             </div>
         </main>
-        <hr style="height: 2px" />
+        <hr class="bg-success" style="height: 2px" />
         <footer>
-            <h5>CopyRight &copy; Sanity Design Studios. All rights reserved.</h5>
+            <h5 class="text-center">CopyRight &copy; Sanity Design Studios. All rights reserved.</h5>
         </footer>
     </div>
 </body>

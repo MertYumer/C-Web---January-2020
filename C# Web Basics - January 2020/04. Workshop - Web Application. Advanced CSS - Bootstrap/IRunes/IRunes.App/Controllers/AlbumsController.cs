@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-
+    using System.Text;
     using IRunes.Data;
     using IRunes.Models;
     using Microsoft.EntityFrameworkCore;
@@ -33,7 +33,7 @@
                     string.Join("<br/>",
                     context
                     .Albums
-                    .Select(a => $"<div><a href=/Albums/Details?albumId={a.Id}>{a.Name}</a></div>")
+                    .Select(a => $"<a class=\"text-primary font-weight-bold\" href=/Albums/Details?albumId={a.Id}>{WebUtility.UrlDecode(a.Name)}</a>")
                     .ToList());
                 }
 
@@ -122,7 +122,7 @@
                 {
                     for (int i = 0; i < tracks.Count; i++)
                     {
-                        tracksHtml += $"<li>{i + 1}. <a href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
+                        tracksHtml += $"<li>{i + 1}. <a class=\"text-primary font-weight-bold\" href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
                     }
                 }
 

@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+
     using IRunes.Data;
     using IRunes.Models;
-    using Microsoft.EntityFrameworkCore;
     using SIS.HTTP.Requests.Contracts;
     using SIS.HTTP.Responses.Contracts;
 
@@ -43,22 +43,27 @@
                     return this.Redirect("/Albums/All");
                 }
 
-                var name = ((ISet<string>)httpRequest.FormData["name"]).FirstOrDefault();
-                var link = ((ISet<string>)httpRequest.FormData["link"]).FirstOrDefault();
-                var price = ((ISet<string>)httpRequest.FormData["price"]).FirstOrDefault();
+                string name = ((ISet<string>)httpRequest.FormData["name"]).FirstOrDefault();
+                string link = ((ISet<string>)httpRequest.FormData["link"]).FirstOrDefault();
+                decimal price;
+
+                if (!decimal.TryParse(((ISet<string>)httpRequest.FormData["price"]).FirstOrDefault(), out price))
+                {
+                    return this.Redirect($"/Tracks/Create?albumId={albumId}");
+                }
 
                 var track = new Track
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = name,
                     Link = link,
-                    Price = decimal.Parse(price),
+                    Price = price,
                     AlbumId = albumId
                 };
 
                 if (!this.IsValid(track))
                 {
-                    return this.Redirect($"/Albums/Details?albumId={albumId}");
+                    return this.Redirect($"/Tracks/Create?albumId={albumId}");
                 }
 
                 albumFromDb.Tracks.Add(track);
