@@ -32,16 +32,18 @@
         <hr class="bg-success" style="height: 2px" />
         <main>
             <div>
-                <h2>Name: @Model.TrackName</h2>
-                <h2>Price: @Model.TrackPrice</h2>
-                <div>
-                    <iframe width="800" height="400" src=@Model.TrackLink>
+                <h2 class="text-center">Track Name: @Model.TrackName</h2>
+                <h2 class="text-center">Track Price: @Model.TrackPrice</h2>
+                <hr class="bg-success w-50" style="height: 2px" />
+                <div class="d-flex justify-content-center">
+                    <iframe width="790" height="400" src=@Model.TrackLink>
                     </iframe>
                 </div>
+                <hr class="bg-success w-50" style="height: 2px" />
             </div>
-            <hr />
-            <div>
-                <a href="/Albums/Details?albumId=@Model.AlbumId">Back To Album</a>
+           
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-success" href="/Albums/Details?albumId=@Model.AlbumId">Back To Album</a>
             </div>
         </main>
         <hr class="bg-success" style="height: 2px" />
