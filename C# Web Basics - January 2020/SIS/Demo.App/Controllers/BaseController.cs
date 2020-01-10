@@ -4,8 +4,8 @@
     using System.Runtime.CompilerServices;
 
     using SIS.HTTP.Enums;
-    using SIS.HTTP.Responses.Contracts;
-    using SIS.WebServer.Results;
+    using SIS.HTTP.Responses;
+    using SIS.MvcFramework.Result;
 
     public abstract class BaseController
     {

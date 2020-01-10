@@ -2,14 +2,15 @@
 {
     using Demo.App.Controllers;
     using SIS.HTTP.Enums;
-    using SIS.WebServer;
-    using SIS.WebServer.Routing;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Routing;
+    using SIS.MvcFramework.Routing.Contracts;
 
     public class Launcher
     {
         public static void Main()
         {
-            var serverRoutingTable = new ServerRoutingTable();
+            IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 
             serverRoutingTable.Add(
                 HttpRequestMethod.Get,

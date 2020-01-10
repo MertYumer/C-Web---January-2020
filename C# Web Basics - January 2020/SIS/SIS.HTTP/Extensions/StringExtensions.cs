@@ -1,8 +1,7 @@
 ﻿namespace SIS.HTTP.Extensions
 {
-    public class StringExtensions
+    public static class StringExtensions
     {
-        public static string Capitalize(string text) 
-            => char.ToUpper(text[0]) + text.Substring(1).ToLower();
+        public static string Capitalize(this string text) => char.ToUpper(text[0]) + text.Substring(1).ToLower();
     }
 }

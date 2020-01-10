@@ -1,48 +1,60 @@
-namespace SIS.HTTP.Cookies
+﻿namespace SIS.HTTP.Cookies
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Text;
-	
-	using SIS.HTTP.Common;
-	using SIS.HTTP.Cookies.Contracts;
-	
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using SIS.HTTP.Common;
+
     public class HttpCookieCollection : IHttpCookieCollection
     {
-        private readonly Dictionary<string, HttpCookie> httpCookies;
+        private Dictionary<string, HttpCookie> httpCookies;
 
         public HttpCookieCollection()
         {
             this.httpCookies = new Dictionary<string, HttpCookie>();
         }
 
-        public void AddCookie(HttpCookie cookie)
+        public void AddCookie(HttpCookie httpCookie)
         {
-			CoreValidator.ThrowIfNull(cookie, nameof(cookie));
-			this.httpCookies.Add(cookie.Key, cookie);
-		}
+            CoreValidator.ThrowIfNull(httpCookie, nameof(httpCookie));
+
+            if (!ContainsCookie(httpCookie.Key))
+            {
+                this.httpCookies.Add(httpCookie.Key, httpCookie);
+            }
+        }
 
         public bool ContainsCookie(string key)
         {
-			CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
-			return this.httpCookies.ContainsKey(key);
-		}
+            CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
+
+            return this.httpCookies.ContainsKey(key);
+        }
 
         public HttpCookie GetCookie(string key)
         {
-			if (!this.ContainsCookie(key))
-            {
-                throw new ArgumentException("Invalid key!");
-            }
-			
-			return this.httpCookies[key];
-		}
+            CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
+
+            // TODO: Validation for existing parameter (maybe throw exception)
+
+            return this.httpCookies[key];
+        }
 
         public bool HasCookies()
         {
-			return this.httpCookies.Count > 0;
-		}
+            return this.httpCookies.Count != 0;
+        }
+
+        public IEnumerator<HttpCookie> GetEnumerator()
+        {
+            return this.httpCookies.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public override string ToString()
         {
@@ -54,16 +66,6 @@ namespace SIS.HTTP.Cookies
             }
 
             return sb.ToString();
-        }
-
-        public IEnumerator<HttpCookie> GetEnumerator()
-        {
-            return httpCookies.Values.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

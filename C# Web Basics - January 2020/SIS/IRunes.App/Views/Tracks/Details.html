@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>IRunes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+                <a class="navbar-brand text-white" href="#">IRunes</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/Albums/All">Albums</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/Users/Logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <hr class="bg-success" style="height: 2px" />
+        <main>
+            <div>
+                <h2 class="text-center">Track Name: @Model.TrackName</h2>
+                <h2 class="text-center">Track Price: @Model.TrackPrice</h2>
+                <hr class="bg-success w-50" style="height: 2px" />
+                <div class="d-flex justify-content-center">
+                    <iframe width="790" height="400" src=@Model.TrackLink>
+                    </iframe>
+                </div>
+                <hr class="bg-success w-50" style="height: 2px" />
+            </div>
+           
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-success" href="/Albums/Details?albumId=@Model.AlbumId">Back To Album</a>
+            </div>
+        </main>
+        <hr class="bg-success" style="height: 2px" />
+        <footer>
+            <h5 class="text-center">CopyRight &copy; Sanity Design Studios. All rights reserved.</h5>
+        </footer>
+    </div>
+</body>
+</html>

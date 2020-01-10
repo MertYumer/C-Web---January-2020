@@ -1,10 +1,8 @@
 ﻿namespace SIS.HTTP.Sessions
 {
-    using System;
     using System.Collections.Generic;
 
     using SIS.HTTP.Common;
-    using SIS.HTTP.Sessions.Contracts;
 
     public class HttpSession : IHttpSession
     {
@@ -18,33 +16,33 @@
 
         public string Id { get; }
 
-        public void AddParameter(string name, object parameter)
+        public object GetParameter(string parameterName)
         {
-            CoreValidator.ThrowIfNullOrEmpty(name, nameof(name));
+            CoreValidator.ThrowIfNullOrEmpty(parameterName, nameof(parameterName));
+
+            // TODO: Validation for existing parameter (maybe throw exception)
+
+            return this.sessionParameters[parameterName];
+        }
+
+        public bool ContainsParameter(string parameterName)
+        {
+            CoreValidator.ThrowIfNullOrEmpty(parameterName, nameof(parameterName));
+
+            return this.sessionParameters.ContainsKey(parameterName);
+        }
+
+        public void AddParameter(string parameterName, object parameter)
+        {
+            CoreValidator.ThrowIfNullOrEmpty(parameterName, nameof(parameterName));
             CoreValidator.ThrowIfNull(parameter, nameof(parameter));
 
-            this.sessionParameters[name] = parameter;
+            this.sessionParameters[parameterName] = parameter;
         }
 
         public void ClearParameters()
         {
             this.sessionParameters.Clear();
-        }
-
-        public bool ContainsParameter(string name)
-        {
-            CoreValidator.ThrowIfNullOrEmpty(name, nameof(name));
-            return sessionParameters.ContainsKey(name);
-        }
-
-        public object GetParameter(string name)
-        {
-            if (!this.ContainsParameter(name))
-            {
-                throw new ArgumentException("Invalid parameter!");
-            }
-
-            return this.sessionParameters[name];
         }
     }
 }

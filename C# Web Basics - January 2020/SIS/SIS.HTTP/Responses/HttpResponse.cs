@@ -4,11 +4,9 @@
 
     using SIS.HTTP.Common;
     using SIS.HTTP.Cookies;
-    using SIS.HTTP.Cookies.Contracts;
     using SIS.HTTP.Enums;
+    using SIS.HTTP.Extensions;
     using SIS.HTTP.Headers;
-    using SIS.HTTP.Headers.Contracts;
-    using SIS.HTTP.Responses.Contracts;
 
     public class HttpResponse : IHttpResponse
     {
@@ -19,8 +17,7 @@
             this.Content = new byte[0];
         }
 
-        public HttpResponse(HttpResponseStatusCode statusCode)
-            : this()
+        public HttpResponse(HttpResponseStatusCode statusCode) : this()
         {
             CoreValidator.ThrowIfNull(statusCode, nameof(statusCode));
             this.StatusCode = statusCode;
@@ -36,20 +33,19 @@
 
         public void AddHeader(HttpHeader header)
         {
-            CoreValidator.ThrowIfNull(header, nameof(header));
             this.Headers.AddHeader(header);
         }
 
         public void AddCookie(HttpCookie cookie)
         {
-            CoreValidator.ThrowIfNull(cookie, nameof(cookie));
             this.Cookies.AddCookie(cookie);
         }
 
         public byte[] GetBytes()
         {
-            var httpResponseBytesWithoutBody = Encoding.UTF8.GetBytes(this.ToString());
-            var httpResponseBytesWithBody = new byte[httpResponseBytesWithoutBody.Length + this.Content.Length];
+            byte[] httpResponseBytesWithoutBody = Encoding.UTF8.GetBytes(this.ToString());
+
+            byte[] httpResponseBytesWithBody = new byte[httpResponseBytesWithoutBody.Length + this.Content.Length];
 
             for (int i = 0; i < httpResponseBytesWithoutBody.Length; i++)
             {
@@ -66,19 +62,16 @@
 
         public override string ToString()
         {
-            var result = new StringBuilder();
+            StringBuilder result = new StringBuilder();
 
             result
-                .Append($"{GlobalConstants.HttpOneProtocolFragment} {(int)this.StatusCode} {this.StatusCode.ToString()}")
+                .Append($"{GlobalConstants.HttpOneProtocolFragment} {this.StatusCode.GetStatusLine()}")
                 .Append(GlobalConstants.HttpNewLine)
-                .Append($"{this.Headers}")
-                .Append(GlobalConstants.HttpNewLine);
+                .Append($"{this.Headers}").Append(GlobalConstants.HttpNewLine);
 
             if (this.Cookies.HasCookies())
             {
-                result
-                .Append($"{this.Cookies}")
-                .Append(GlobalConstants.HttpNewLine);
+                result.Append($"{this.Cookies}").Append(GlobalConstants.HttpNewLine);
             }
 
             result.Append(GlobalConstants.HttpNewLine);

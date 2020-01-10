@@ -1,6 +1,6 @@
 ﻿namespace SIS.HTTP.Enums
 {
-    public enum  HttpRequestMethod
+    public enum HttpRequestMethod
     {
         Get,
         Post,
