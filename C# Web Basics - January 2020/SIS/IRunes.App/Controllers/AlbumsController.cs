@@ -10,8 +10,10 @@
     using Microsoft.EntityFrameworkCore;
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Attributes;
 
-    public class AlbumsController : BaseController
+    public class AlbumsController : Controller
     {
         public IHttpResponse All(IHttpRequest httpRequest)
         {
@@ -51,6 +53,7 @@
             return this.View();
         }
 
+        [HttpPost]
         public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
@@ -71,10 +74,10 @@
                     Price = 0m
                 };
 
-                if (!this.IsValid(album))
-                {
-                    return this.Redirect("/Albums/Create");
-                }
+                //if (!this.IsValid(album))
+                //{
+                //    return this.Redirect("/Albums/Create");
+                //}
 
                 context.Albums.Add(album);
                 context.SaveChanges();

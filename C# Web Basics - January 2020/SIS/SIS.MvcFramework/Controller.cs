@@ -1,19 +1,17 @@
-﻿namespace IRunes.App.Controllers
+﻿namespace SIS.MvcFramework
 {
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Runtime.CompilerServices;
 
-    using IRunes.Models;
     using SIS.HTTP.Enums;
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
     using SIS.MvcFramework.Result;
 
-    public abstract class BaseController
+    public abstract class Controller
     {
-        public BaseController()
+        public Controller()
         {
             this.ViewData = new Dictionary<string, object>();
         }
@@ -35,11 +33,11 @@
             return httpRequest.Session.ContainsParameter("username");
         }
 
-        protected void SignIn(IHttpRequest httpRequest, User user)
+        protected void SignIn(IHttpRequest httpRequest, string id, string username, string email)
         {
-            httpRequest.Session.AddParameter("username", user.Username);
-            httpRequest.Session.AddParameter("email", user.Email);
-            httpRequest.Session.AddParameter("id", user.Id);
+            httpRequest.Session.AddParameter("username", username);
+            httpRequest.Session.AddParameter("email", email);
+            httpRequest.Session.AddParameter("id", id);
         }
 
         protected void SignOut(IHttpRequest httpRequest)
@@ -61,14 +59,6 @@
         protected IHttpResponse Redirect(string location)
         {
             return new RedirectResult(location);
-        }
-
-        protected bool IsValid(object obj)
-        {
-            var validationResults = new List<ValidationResult>();
-            var validationContext = new ValidationContext(obj);
-
-            return Validator.TryValidateObject(obj, validationContext, validationResults, true);
         }
     }
 }

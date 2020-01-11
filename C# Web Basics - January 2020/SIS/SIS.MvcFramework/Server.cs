@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     using SIS.HTTP.Common;
-    using SIS.MvcFramework.Routing.Contracts;
+    using SIS.MvcFramework.Routing;
 
     public class Server
     {

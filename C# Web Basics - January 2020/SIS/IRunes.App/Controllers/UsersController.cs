@@ -10,14 +10,17 @@
     using IRunes.Models;
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Attributes;
 
-    public class UsersController : BaseController
+    public class UsersController : Controller
     {
         public IHttpResponse Register(IHttpRequest httpRequest)
         {
             return this.View();
         }
 
+        [HttpPost]
         public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())
@@ -40,10 +43,10 @@
                     Email = email
                 };
 
-                if (!this.IsValid(user))
-                {
-                    return this.Redirect("/Users/Register");
-                }
+                //if (!this.IsValid(user))
+                //{
+                //    return this.Redirect("/Users/Register");
+                //}
 
                 context.Users.Add(user);
                 context.SaveChanges();
@@ -57,6 +60,7 @@
             return this.View();
         }
 
+        [HttpPost]
         public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())
@@ -73,7 +77,7 @@
                     return this.Redirect("/Users/Login");
                 }
 
-                this.SignIn(httpRequest, userFromDb);
+                this.SignIn(httpRequest, userFromDb.Id, userFromDb.Username, userFromDb.Email);
             }
 
             return this.Redirect("/");

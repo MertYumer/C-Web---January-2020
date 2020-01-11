@@ -1,4 +1,4 @@
-﻿namespace SIS.MvcFramework.Routing.Contracts
+﻿namespace SIS.MvcFramework.Routing
 {
     using System;
 

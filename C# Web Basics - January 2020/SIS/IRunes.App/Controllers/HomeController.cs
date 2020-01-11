@@ -2,8 +2,9 @@
 {
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
+    using SIS.MvcFramework;
 
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         public IHttpResponse Index(IHttpRequest httpRequest)
         {

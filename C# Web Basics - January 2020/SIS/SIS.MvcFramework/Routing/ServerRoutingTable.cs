@@ -7,7 +7,6 @@
     using SIS.HTTP.Enums;
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
-    using SIS.MvcFramework.Routing.Contracts;
 
     public class ServerRoutingTable : IServerRoutingTable
     {

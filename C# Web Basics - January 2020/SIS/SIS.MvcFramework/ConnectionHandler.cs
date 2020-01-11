@@ -14,7 +14,7 @@
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
     using SIS.MvcFramework.Result;
-    using SIS.MvcFramework.Routing.Contracts;
+    using SIS.MvcFramework.Routing;
     using SIS.MvcFramework.Sessions;
 
     public class ConnectionHandler

@@ -9,8 +9,10 @@
     using IRunes.Models;
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Attributes;
 
-    public class TracksController : BaseController
+    public class TracksController : Controller
     {
         public IHttpResponse Create(IHttpRequest httpRequest)
         {
@@ -25,6 +27,7 @@
             return this.View();
         }
 
+        [HttpPost]
         public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
@@ -45,9 +48,8 @@
 
                 string name = ((ISet<string>)httpRequest.FormData["name"]).FirstOrDefault();
                 string link = ((ISet<string>)httpRequest.FormData["link"]).FirstOrDefault();
-                decimal price;
 
-                if (!decimal.TryParse(((ISet<string>)httpRequest.FormData["price"]).FirstOrDefault(), out price))
+                if (!decimal.TryParse(((ISet<string>)httpRequest.FormData["price"]).FirstOrDefault(), out decimal price))
                 {
                     return this.Redirect($"/Tracks/Create?albumId={albumId}");
                 }
@@ -61,10 +63,10 @@
                     AlbumId = albumId
                 };
 
-                if (!this.IsValid(track))
-                {
-                    return this.Redirect($"/Tracks/Create?albumId={albumId}");
-                }
+                //if (!this.IsValid(track))
+                //{
+                //    return this.Redirect($"/Tracks/Create?albumId={albumId}");
+                //}
 
                 albumFromDb.Tracks.Add(track);
                 albumFromDb.Price = albumFromDb
