@@ -20,7 +20,7 @@
             return this.View();
         }
 
-        [HttpPost]
+        [HttpPost(ActionName = "Register")]
         public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())
@@ -43,11 +43,6 @@
                     Email = email
                 };
 
-                //if (!this.IsValid(user))
-                //{
-                //    return this.Redirect("/Users/Register");
-                //}
-
                 context.Users.Add(user);
                 context.SaveChanges();
             }
@@ -60,7 +55,7 @@
             return this.View();
         }
 
-        [HttpPost]
+        [HttpPost(ActionName = "Login")]
         public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())

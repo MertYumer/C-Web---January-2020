@@ -1,8 +1,9 @@
 ﻿namespace SIS.MvcFramework.Attributes
 {
-    using System;
+    using SIS.HTTP.Enums;
 
-    public class HttpPostAttribute : Attribute
+    public class HttpPostAttribute : BaseHttpAttribute
     {
+        public override HttpRequestMethod Method => HttpRequestMethod.Post;
     }
 }

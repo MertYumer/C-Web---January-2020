@@ -1,7 +1,7 @@
-﻿using SIS.MvcFramework;
-
-namespace IRunes.App
+﻿namespace IRunes.App
 {
+    using SIS.MvcFramework;
+
     public static class Program
     {
         public static void Main()

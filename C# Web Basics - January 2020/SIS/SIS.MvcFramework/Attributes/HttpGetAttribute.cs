@@ -1,8 +1,9 @@
 ﻿namespace SIS.MvcFramework.Attributes
 {
-    using System;
+    using SIS.HTTP.Enums;
 
-    public class HttpGetAttribute : Attribute
+    public class HttpGetAttribute : BaseHttpAttribute
     {
+        public override HttpRequestMethod Method => HttpRequestMethod.Get;
     }
 }

@@ -27,7 +27,7 @@
             return this.View();
         }
 
-        [HttpPost]
+        [HttpPost(ActionName = "Create")]
         public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
@@ -62,11 +62,6 @@
                     Price = price,
                     AlbumId = albumId
                 };
-
-                //if (!this.IsValid(track))
-                //{
-                //    return this.Redirect($"/Tracks/Create?albumId={albumId}");
-                //}
 
                 albumFromDb.Tracks.Add(track);
                 albumFromDb.Price = albumFromDb

@@ -53,7 +53,7 @@
             return this.View();
         }
 
-        [HttpPost]
+        [HttpPost(ActionName = "Create")]
         public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
@@ -73,11 +73,6 @@
                     Cover = cover,
                     Price = 0m
                 };
-
-                //if (!this.IsValid(album))
-                //{
-                //    return this.Redirect("/Albums/Create");
-                //}
 
                 context.Albums.Add(album);
                 context.SaveChanges();
