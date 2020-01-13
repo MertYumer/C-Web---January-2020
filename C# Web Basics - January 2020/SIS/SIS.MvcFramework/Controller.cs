@@ -1,17 +1,16 @@
 ﻿namespace SIS.MvcFramework
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Runtime.CompilerServices;
 
     using SIS.HTTP.Enums;
     using SIS.HTTP.Requests;
-    using SIS.HTTP.Responses;
+    using SIS.MvcFramework.Extensions;
     using SIS.MvcFramework.Result;
 
     public abstract class Controller
     {
-        public Controller()
+        protected Controller()
         {
             this.ViewData = new Dictionary<string, object>();
         }
@@ -45,20 +44,41 @@
             httpRequest.Session.ClearParameters();
         }
 
-        protected IHttpResponse View([CallerMemberName] string view = null)
+        protected ActionResult View([CallerMemberName] string view = null)
         {
             var controllerName = this.GetType().Name.Replace("Controller", "");
             var viewName = view;
-            var content = File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
 
-            content = ParseTemplate(content);
+            var viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
+            viewContent = ParseTemplate(viewContent);
 
-            return new HtmlResult(content, HttpResponseStatusCode.Ok);
+            var htmlResult = new HtmlResult(viewContent, HttpResponseStatusCode.Ok);
+            return htmlResult;
         }
 
-        protected IHttpResponse Redirect(string location)
+        protected ActionResult Redirect(string url)
         {
-            return new RedirectResult(location);
+            return new RedirectResult(url);
+        }
+
+        protected ActionResult Xml(object obj)
+        {
+            return new XmlResult(obj.ToXml());
+        }
+
+        protected ActionResult Json(object obj)
+        {
+            return new JsonResult(obj.ToJson());
+        }
+
+        protected ActionResult File(byte[] fileContent)
+        {
+            return new FileResult(fileContent);
+        }
+
+        protected ActionResult NotFound(string message = "")
+        {
+            return new NotFoundResult(message);
         }
     }
 }

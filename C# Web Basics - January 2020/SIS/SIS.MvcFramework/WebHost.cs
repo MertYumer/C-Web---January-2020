@@ -6,7 +6,8 @@
 
     using SIS.HTTP.Enums;
     using SIS.HTTP.Responses;
-    using SIS.MvcFramework.Attributes;
+    using SIS.MvcFramework.Attributes.Action;
+    using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Routing;
 
     public static class WebHost
@@ -41,7 +42,8 @@
                     BindingFlags.DeclaredOnly |
                     BindingFlags.Public |
                     BindingFlags.Instance)
-                    .Where(m => !m.IsSpecialName && m.DeclaringType == controller);
+                    .Where(m => !m.IsSpecialName && m.DeclaringType == controller)
+                    .Where(x => x.GetCustomAttributes().All(a => a.GetType() != typeof(NonActionAttribute)));
 
                 foreach (var action in actions)
                 {

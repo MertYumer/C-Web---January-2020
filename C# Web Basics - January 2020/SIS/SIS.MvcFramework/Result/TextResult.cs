@@ -4,9 +4,8 @@
 
     using SIS.HTTP.Enums;
     using SIS.HTTP.Headers;
-    using SIS.HTTP.Responses;
 
-    public class TextResult : HttpResponse
+    public class TextResult : ActionResult
     {
         public TextResult(string content, HttpResponseStatusCode responseStatusCode, 
             string contentType = "text/plain; charset=utf-8") : base(responseStatusCode)
