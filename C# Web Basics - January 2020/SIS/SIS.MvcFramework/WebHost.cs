@@ -8,6 +8,8 @@
     using SIS.HTTP.Responses;
     using SIS.MvcFramework.Attributes.Action;
     using SIS.MvcFramework.Attributes.Http;
+    using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Result;
     using SIS.MvcFramework.Routing;
 
     public static class WebHost
@@ -76,7 +78,22 @@
                     serverRoutingTable.Add(httpMethod, path, request =>
                     {
                         var controllerInstance = Activator.CreateInstance(controller);
-                        var response = action.Invoke(controllerInstance, new[] { request }) as IHttpResponse;
+                        ((Controller)controllerInstance).Request = request;
+
+                        //TODO: Refactor this
+                        var controllerPrincipal = ((Controller)controllerInstance).User;
+
+                        var authorizeAttribute = action
+                        .GetCustomAttributes()
+                        .LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
+
+                        if (authorizeAttribute != null && !authorizeAttribute.IsInAuthority(controllerPrincipal))
+                        {
+                            //TODO: Redirect to configured URL
+                            return new HttpResponse(HttpResponseStatusCode.Forbidden);
+                        }
+
+                        var response = action.Invoke(controllerInstance, new object[0]) as ActionResult;
                         return response;
                     });
 

@@ -6,6 +6,7 @@
     using SIS.HTTP.Enums;
     using SIS.HTTP.Requests;
     using SIS.MvcFramework.Extensions;
+    using SIS.MvcFramework.Identity;
     using SIS.MvcFramework.Result;
 
     public abstract class Controller
@@ -17,6 +18,13 @@
 
         protected Dictionary<string, object> ViewData { get; set; }
 
+        public Principal User =>
+            this.Request.Session.ContainsParameter("principal")
+            ? (Principal)this.Request.Session.GetParameter("principal")
+            : null;
+
+        public IHttpRequest Request { get; set; }
+
         private string ParseTemplate(string viewContent)
         {
             foreach (var param in ViewData)
@@ -27,21 +35,24 @@
             return viewContent;
         }
 
-        protected bool IsLoggedIn(IHttpRequest httpRequest)
+        protected bool IsLoggedIn()
         {
-            return httpRequest.Session.ContainsParameter("username");
+            return this.Request.Session.ContainsParameter("principal");
         }
 
-        protected void SignIn(IHttpRequest httpRequest, string id, string username, string email)
+        protected void SignIn(string id, string username, string email)
         {
-            httpRequest.Session.AddParameter("username", username);
-            httpRequest.Session.AddParameter("email", email);
-            httpRequest.Session.AddParameter("id", id);
+            this.Request.Session.AddParameter("principal", new Principal
+            {
+                Id = id,
+                Username = username,
+                Email = email
+            });
         }
 
-        protected void SignOut(IHttpRequest httpRequest)
+        protected void SignOut()
         {
-            httpRequest.Session.ClearParameters();
+            this.Request.Session.ClearParameters();
         }
 
         protected ActionResult View([CallerMemberName] string view = null)

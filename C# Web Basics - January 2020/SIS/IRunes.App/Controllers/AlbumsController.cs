@@ -5,129 +5,108 @@
     using System.Linq;
     using System.Net;
 
-    using IRunes.Data;
     using IRunes.Models;
+    using IRunes.Services;
     using Microsoft.EntityFrameworkCore;
-    using SIS.HTTP.Requests;
-    using SIS.HTTP.Responses;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
+    using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Result;
 
     public class AlbumsController : Controller
     {
-        public IHttpResponse All(IHttpRequest httpRequest)
+        private readonly IAlbumService albumService;
+
+        public AlbumsController(IAlbumService albumService)
         {
-            if (!this.IsLoggedIn(httpRequest))
-            {
-                return this.Redirect("/Users/Login");
-            }
-
-            using (var context = new RunesDbContext())
-            {
-                if (!context.Albums.Any())
-                {
-                    this.ViewData["Albums"] = "There are currently no albums.";
-                }
-
-                else
-                {
-                    this.ViewData["Albums"] =
-                    string.Join("<br/>",
-                    context
-                    .Albums
-                    .Select(a => $"<a class=\"text-primary font-weight-bold\" href=/Albums/Details?albumId={a.Id}>{WebUtility.UrlDecode(a.Name)}</a>")
-                    .ToList());
-                }
-
-                return this.View();
-            }
+            this.albumService = albumService;
         }
 
-        public IHttpResponse Create(IHttpRequest httpRequest)
+        [Authorize]
+        public IActionResult All()
         {
-            if (!this.IsLoggedIn(httpRequest))
+            ICollection<Album> allAlbums = this.albumService.GetAllAlbums();
+
+            if (!allAlbums.Any())
             {
-                return this.Redirect("/Users/Login");
+                this.ViewData["Albums"] = "There are currently no albums.";
+            }
+
+            else
+            {
+                this.ViewData["Albums"] =
+                string.Join("<br/>",
+                allAlbums
+                .Select(a => $"<a class=\"text-primary font-weight-bold\" href=/Albums/Details?albumId={a.Id}>{WebUtility.UrlDecode(a.Name)}</a>")
+                .ToList());
             }
 
             return this.View();
         }
 
-        [HttpPost(ActionName = "Create")]
-        public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
+        [Authorize]
+        public IActionResult Create()
         {
-            if (!this.IsLoggedIn(httpRequest))
-            {
-                return this.Redirect("/Users/Login");
-            }
-
-            using (var context = new RunesDbContext())
-            {
-                var name = ((ISet<string>)httpRequest.FormData["name"]).FirstOrDefault();
-                var cover = ((ISet<string>)httpRequest.FormData["cover"]).FirstOrDefault();
-
-                var album = new Album
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = name,
-                    Cover = cover,
-                    Price = 0m
-                };
-
-                context.Albums.Add(album);
-                context.SaveChanges();
-
-                return this.Redirect("/Albums/All");
-            }
+            return this.View();
         }
 
-        public IHttpResponse Details(IHttpRequest httpRequest)
+        [Authorize]
+        [HttpPost(ActionName = "Create")]
+        public IActionResult CreateConfirm()
         {
-            if (!this.IsLoggedIn(httpRequest))
+            var name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
+            var cover = ((ISet<string>)this.Request.FormData["cover"]).FirstOrDefault();
+
+            var album = new Album
             {
-                return this.Redirect("/Users/Login");
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Cover = cover,
+                Price = 0m
+            };
+
+            this.albumService.CreateAlbum(album);
+
+            return this.Redirect("/Albums/All");
+        }
+
+        [Authorize]
+        public IActionResult Details()
+        {
+            var albumId = this.Request.QueryData["albumId"].ToString();
+            var albumFromDb = this.albumService.GetAlbumById(albumId);
+
+            if (albumFromDb == null)
+            {
+                return this.Redirect("/Albums/All");
             }
 
-            using (var context = new RunesDbContext())
+            this.ViewData["AlbumId"] = albumFromDb.Id;
+            this.ViewData["AlbumName"] = WebUtility.UrlDecode(albumFromDb.Name);
+            this.ViewData["AlbumCover"] = WebUtility.UrlDecode(albumFromDb.Cover);
+            this.ViewData["AlbumPrice"] = $"${albumFromDb.Price:f2}";
+
+            var tracks = albumFromDb.Tracks.ToList();
+            var tracksHtml = string.Empty;
+
+            if (!tracks.Any())
             {
-                var albumId = httpRequest.QueryData["albumId"].ToString();
-                var albumFromDb = context
-                    .Albums
-                    .Include(a => a.Tracks)
-                    .FirstOrDefault(a => a.Id == albumId);
-
-                if (albumFromDb == null)
-                {
-                    return this.Redirect("/Albums/All");
-                }
-
-                this.ViewData["AlbumId"] = albumFromDb.Id;
-                this.ViewData["AlbumName"] = WebUtility.UrlDecode(albumFromDb.Name);
-                this.ViewData["AlbumCover"] = WebUtility.UrlDecode(albumFromDb.Cover);
-                this.ViewData["AlbumPrice"] = $"${albumFromDb.Price:f2}";
-
-                var tracks = albumFromDb.Tracks.ToList();
-                var tracksHtml = string.Empty;
-
-                if (!tracks.Any())
-                {
-                    tracksHtml = "<p>Nothing to show...</p>" +
-                                 Environment.NewLine +
-                                 "<p>This album has no tracks added yet!</p>";
-                }
-
-                else
-                {
-                    for (int i = 0; i < tracks.Count; i++)
-                    {
-                        tracksHtml += $"<li>{i + 1}. <a class=\"text-primary font-weight-bold\" href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
-                    }
-                }
-
-                this.ViewData["AlbumTracks"] = tracksHtml;
-
-                return this.View();
+                tracksHtml = "<p>Nothing to show...</p>" +
+                             Environment.NewLine +
+                             "<p>This album has no tracks added yet!</p>";
             }
+
+            else
+            {
+                for (int i = 0; i < tracks.Count; i++)
+                {
+                    tracksHtml += $"<li>{i + 1}. <a class=\"text-primary font-weight-bold\" href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
+                }
+            }
+
+            this.ViewData["AlbumTracks"] = tracksHtml;
+
+            return this.View();
         }
     }
 }

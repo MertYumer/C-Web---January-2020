@@ -1,0 +1,34 @@
+﻿namespace IRunes.Services
+{
+    using System.Linq;
+
+    using IRunes.Data;
+    using IRunes.Models;
+
+    public class UserService : IUserService
+    {
+        private readonly RunesDbContext context;
+
+        public UserService(RunesDbContext runesDbContext)
+        {
+            this.context = runesDbContext;
+        }
+
+        public User CreateUser(User user)
+        {
+            user = this.context.Users.Add(user).Entity;
+            this.context.SaveChanges();
+
+            return user;
+        }
+
+        public User GetUserByUsernameAndPassword(string username, string password)
+        {
+            var user =  this.context
+                .Users
+                .FirstOrDefault(u => (u.Username == username || u.Email == username) && u.Password == password);
+
+            return user;
+        }
+    }
+}

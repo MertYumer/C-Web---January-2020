@@ -1,23 +1,22 @@
 ﻿namespace IRunes.App.Controllers
 {
-    using SIS.HTTP.Requests;
-    using SIS.HTTP.Responses;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
+    using SIS.MvcFramework.Result;
 
     public class HomeController : Controller
     {
         [HttpGet(Url = "/")]
-        public IHttpResponse IndexSlash(IHttpRequest httpRequest)
+        public IActionResult IndexSlash()
         {
-            return Index(httpRequest);
+            return Index();
         }
 
-        public IHttpResponse Index(IHttpRequest httpRequest)
+        public IActionResult Index()
         {
-            if (this.IsLoggedIn(httpRequest))
+            if (this.IsLoggedIn())
             {
-                this.ViewData.Add("Username", httpRequest.Session.GetParameter("username").ToString());
+                this.ViewData.Add("Username", this.User.Username);
                 return this.View("/Index-Logged");
             }
 
