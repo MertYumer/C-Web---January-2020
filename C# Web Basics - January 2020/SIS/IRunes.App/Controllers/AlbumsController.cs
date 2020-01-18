@@ -4,22 +4,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-
+    using IRunes.App.ViewModels.Albums;
     using IRunes.Models;
     using IRunes.Services;
-    using Microsoft.EntityFrameworkCore;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
 
     public class AlbumsController : Controller
     {
         private readonly IAlbumService albumService;
 
-        public AlbumsController(IAlbumService albumService)
+        public AlbumsController()
         {
-            this.albumService = albumService;
+            this.albumService = new AlbumService();
         }
 
         [Authorize]
@@ -75,6 +75,8 @@
         {
             var albumId = this.Request.QueryData["albumId"].ToString();
             var albumFromDb = this.albumService.GetAlbumById(albumId);
+
+            var albumViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
 
             if (albumFromDb == null)
             {

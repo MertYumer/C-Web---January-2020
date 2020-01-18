@@ -1,6 +1,7 @@
 ﻿namespace IRunes.App
 {
     using IRunes.Data;
+    using IRunes.Services;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Routing;
 

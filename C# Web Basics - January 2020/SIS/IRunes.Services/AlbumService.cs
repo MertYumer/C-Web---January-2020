@@ -1,6 +1,5 @@
 ﻿namespace IRunes.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -12,9 +11,15 @@
     {
         private readonly RunesDbContext context;
 
-        public AlbumService(RunesDbContext runesDbContext)
+        public AlbumService()
         {
-            this.context = runesDbContext;
+            this.context = new RunesDbContext();
+        }
+
+        public ICollection<Album> GetAllAlbums()
+        {
+            var allAlbums = context.Albums.ToList();
+            return allAlbums;
         }
 
         public Album CreateAlbum(Album album)
@@ -35,16 +40,9 @@
             return album;
         }
 
-        public ICollection<Album> GetAllAlbums()
-        {
-            var allAlbums = context.Albums.ToList();
-            Console.WriteLine(allAlbums.Count);
-            return allAlbums;
-        }
-
         public bool AddTrackToAlbum(string albumId, Track track)
         {
-             var albumFromDb = context.Albums.FirstOrDefault(a => a.Id == albumId);
+            var albumFromDb = this.GetAlbumById(albumId);
 
             if (albumFromDb == null)
             {

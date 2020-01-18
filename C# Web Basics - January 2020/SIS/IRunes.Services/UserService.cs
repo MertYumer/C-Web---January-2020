@@ -9,9 +9,9 @@
     {
         private readonly RunesDbContext context;
 
-        public UserService(RunesDbContext runesDbContext)
+        public UserService()
         {
-            this.context = runesDbContext;
+            this.context = new RunesDbContext();
         }
 
         public User CreateUser(User user)

@@ -9,14 +9,14 @@
     {
         private readonly RunesDbContext context;
 
-        public TrackService(RunesDbContext runesDbContext)
+        public TrackService()
         {
-            this.context = runesDbContext;
+            this.context = new RunesDbContext();
         }
 
         public Track GetTrackById(string trackId)
         {
-            var track =  this.context
+            var track = this.context
                 .Tracks
                 .FirstOrDefault(t => t.Id == trackId);
 
