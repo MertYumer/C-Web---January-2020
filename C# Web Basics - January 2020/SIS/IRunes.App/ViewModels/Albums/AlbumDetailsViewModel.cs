@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IRunes.App.ViewModels.Albums
+﻿namespace IRunes.App.ViewModels.Albums
 {
     public class AlbumDetailsViewModel
     {

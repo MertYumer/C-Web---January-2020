@@ -76,7 +76,7 @@
             var albumId = this.Request.QueryData["albumId"].ToString();
             var albumFromDb = this.albumService.GetAlbumById(albumId);
 
-            var albumViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
+            var albumDetailsViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
 
             if (albumFromDb == null)
             {
@@ -108,7 +108,7 @@
 
             this.ViewData["AlbumTracks"] = tracksHtml;
 
-            return this.View();
+            return this.View(albumDetailsViewModel);
         }
     }
 }

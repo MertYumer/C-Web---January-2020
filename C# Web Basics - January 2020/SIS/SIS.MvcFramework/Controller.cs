@@ -3,16 +3,19 @@
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
-    using SIS.HTTP.Enums;
     using SIS.HTTP.Requests;
     using SIS.MvcFramework.Extensions;
     using SIS.MvcFramework.Identity;
     using SIS.MvcFramework.Result;
+    using SIS.MvcFramework.ViewEngine;
 
     public abstract class Controller
     {
+        private IViewEngine viewEngine;
+
         protected Controller()
         {
+            this.viewEngine = new SisViewEngine();
             this.ViewData = new Dictionary<string, object>();
         }
 
@@ -24,16 +27,6 @@
             : null;
 
         public IHttpRequest Request { get; set; }
-
-        private string ParseTemplate(string viewContent)
-        {
-            foreach (var param in ViewData)
-            {
-                viewContent = viewContent.Replace($"@Model.{param.Key}", param.Value.ToString());
-            }
-
-            return viewContent;
-        }
 
         protected bool IsLoggedIn()
         {
@@ -57,14 +50,20 @@
 
         protected ActionResult View([CallerMemberName] string view = null)
         {
+            return this.View<object>(null, view);
+        }
+
+        protected ActionResult View<T>(T model = null, [CallerMemberName] string view = null)
+            where T : class
+        {
             var controllerName = this.GetType().Name.Replace("Controller", "");
             var viewName = view;
 
             var viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
-            viewContent = ParseTemplate(viewContent);
+            viewContent = this.viewEngine.GetHtml(viewContent, model);
 
             var layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
-            layoutContent = ParseTemplate(layoutContent);
+            layoutContent = this.viewEngine.GetHtml(layoutContent, model);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
             var htmlResult = new HtmlResult(layoutContent);
