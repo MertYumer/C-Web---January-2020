@@ -14,12 +14,6 @@
 
         public IActionResult Index()
         {
-            if (this.IsLoggedIn())
-            {
-                this.ViewData.Add("Username", this.User.Username);
-                return this.View("/Index-Logged");
-            }
-
             return this.View();
         }
     }

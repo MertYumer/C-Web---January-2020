@@ -63,7 +63,12 @@
             var viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
             viewContent = ParseTemplate(viewContent);
 
-            var htmlResult = new HtmlResult(viewContent, HttpResponseStatusCode.Ok);
+            var layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
+            layoutContent = ParseTemplate(layoutContent);
+            layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
+
+            var htmlResult = new HtmlResult(layoutContent);
+
             return htmlResult;
         }
 
