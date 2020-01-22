@@ -10,7 +10,7 @@
     {
         [Theory]
         [InlineData("TestWithoutCSharpCode")]
-        [InlineData("UseForForeachAndIf")]
+        [InlineData("TestForeachAndIf")]
         [InlineData("UseModelData")]
         public void TestGetHtml(string testFileName)
         {

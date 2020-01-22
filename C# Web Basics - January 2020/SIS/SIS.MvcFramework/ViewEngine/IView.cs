@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SIS.MvcFramework.ViewEngine
+﻿namespace SIS.MvcFramework.ViewEngine
 {
-    interface IView
+    public interface IView
     {
+        string GetHtml();
     }
 }
