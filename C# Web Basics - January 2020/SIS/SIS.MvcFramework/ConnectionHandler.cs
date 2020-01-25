@@ -7,7 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using SIS.HTTP.Common;
+    using SIS.Common;
     using SIS.HTTP.Cookies;
     using SIS.HTTP.Enums;
     using SIS.HTTP.Exceptions;
@@ -28,9 +28,9 @@
 
         public ConnectionHandler(Socket client, IServerRoutingTable serverRoutingTable, IHttpSessionStorage httpSessionStorage)
         {
-            CoreValidator.ThrowIfNull(client, nameof(client));
-            CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
-            CoreValidator.ThrowIfNull(httpSessionStorage, nameof(httpSessionStorage));
+            client.ThrowIfNull(nameof(client));
+            serverRoutingTable.ThrowIfNull(nameof(serverRoutingTable));
+            serverRoutingTable.ThrowIfNull(nameof(httpSessionStorage));
 
             this.client = client;
             this.serverRoutingTable = serverRoutingTable;
