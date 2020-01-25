@@ -27,21 +27,12 @@
         {
             ICollection<Album> allAlbums = this.albumService.GetAllAlbums();
 
-            if (!allAlbums.Any())
+            if (allAlbums.Count != 0)
             {
-                this.ViewData["Albums"] = "There are currently no albums.";
+                return this.View(allAlbums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
             }
 
-            else
-            {
-                this.ViewData["Albums"] =
-                string.Join("<br/>",
-                allAlbums
-                .Select(a => $"<a class=\"text-primary font-weight-bold\" href=/Albums/Details?albumId={a.Id}>{WebUtility.UrlDecode(a.Name)}</a>")
-                .ToList());
-            }
-
-            return this.View();
+            return this.View(new List<AlbumAllViewModel>());
         }
 
         [Authorize]
@@ -82,31 +73,6 @@
             {
                 return this.Redirect("/Albums/All");
             }
-
-            this.ViewData["AlbumId"] = albumFromDb.Id;
-            this.ViewData["AlbumName"] = WebUtility.UrlDecode(albumFromDb.Name);
-            this.ViewData["AlbumCover"] = WebUtility.UrlDecode(albumFromDb.Cover);
-            this.ViewData["AlbumPrice"] = $"${albumFromDb.Price:f2}";
-
-            var tracks = albumFromDb.Tracks.ToList();
-            var tracksHtml = string.Empty;
-
-            if (!tracks.Any())
-            {
-                tracksHtml = "<p>Nothing to show...</p>" +
-                             Environment.NewLine +
-                             "<p>This album has no tracks added yet!</p>";
-            }
-
-            else
-            {
-                for (int i = 0; i < tracks.Count; i++)
-                {
-                    tracksHtml += $"<li>{i + 1}. <a class=\"text-primary font-weight-bold\" href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
-                }
-            }
-
-            this.ViewData["AlbumTracks"] = tracksHtml;
 
             return this.View(albumDetailsViewModel);
         }
