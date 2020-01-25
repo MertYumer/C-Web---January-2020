@@ -27,7 +27,7 @@ namespace AppViewCodeNamespace
     {{
         public string GetHtml(object model)
         {{
-            var Model = model as {model.GetType().FullName};
+            var Model = model as {(model == null ? "new {}" : "model as " + model.GetType().FullName)};
 
             var html = new StringBuilder();
 
@@ -48,6 +48,7 @@ namespace AppViewCodeNamespace
             var lines = viewContent.Split(new[] { "\r\n", "\n\r", "\n" }, StringSplitOptions.None);
             var cSharpCode = new StringBuilder();
             var supportedOperators = new[] { "for", "if", "else" };
+            var cSharpCodeRegex = new Regex(@"[^\s<""\&]+", RegexOptions.Compiled);
 
             foreach (var line in lines)
             {
@@ -74,6 +75,12 @@ namespace AppViewCodeNamespace
                         cSharpCode.AppendLine(csharpLine);
                     }
 
+                    if (line.Contains("@RenderBody()"))
+                    {
+                        var csharpLine = $"html.AppendLine(@\"{line}\");";
+                        cSharpCode.AppendLine(csharpLine);
+                    }
+
                     else
                     {
                         var cSharpStringToAppend = "html.AppendLine(@\"";
@@ -82,8 +89,7 @@ namespace AppViewCodeNamespace
                         while (restOfLine.Contains("@"))
                         {
                             var atSignLocation = restOfLine.IndexOf("@");
-                            var plainText = restOfLine.Substring(0, atSignLocation);
-                            var cSharpCodeRegex = new Regex(@"[^\s<""]+", RegexOptions.Compiled);
+                            var plainText = restOfLine.Substring(0, atSignLocation).Replace("\"", "\"\""); ;
                             var cSharpExpression = cSharpCodeRegex.Match(restOfLine.Substring(atSignLocation + 1))?.Value;
                             cSharpStringToAppend += plainText + "\" + " + cSharpExpression + " + @\"";
 
@@ -109,6 +115,8 @@ namespace AppViewCodeNamespace
 
         private IView CompileAndInstance(string code, Assembly modelAssembly)
         {
+            modelAssembly = modelAssembly ?? Assembly.GetEntryAssembly();
+
             var compilation = CSharpCompilation.Create("AppViewAssembly")
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                 .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))

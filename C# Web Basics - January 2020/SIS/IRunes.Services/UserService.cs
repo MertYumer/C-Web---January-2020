@@ -26,7 +26,7 @@
         {
             var user =  this.context
                 .Users
-                .FirstOrDefault(u => (u.Username == username || u.Email == username) && u.Password == password);
+                .SingleOrDefault(u => (u.Username == username || u.Email == username) && u.Password == password);
 
             return user;
         }
