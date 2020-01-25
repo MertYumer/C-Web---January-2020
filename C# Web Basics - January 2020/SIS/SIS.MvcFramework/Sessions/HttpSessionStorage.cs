@@ -4,16 +4,25 @@
 
     using SIS.HTTP.Sessions;
 
-    public class HttpSessionStorage
+    public class HttpSessionStorage : IHttpSessionStorage
     {
         public const string SessionCookieKey = "SIS_ID";
 
-        private static readonly ConcurrentDictionary<string, IHttpSession> httpSessions =
-            new ConcurrentDictionary<string, IHttpSession>();
+        private readonly ConcurrentDictionary<string, IHttpSession> httpSessions;
 
-        public static IHttpSession GetSession(string id)
+        public HttpSessionStorage()
         {
-            return httpSessions.GetOrAdd(id, _ => new HttpSession(id));
+            this.httpSessions = new ConcurrentDictionary<string, IHttpSession>();
+        }
+
+        public IHttpSession GetSession(string sessionId)
+        {
+            return httpSessions.GetOrAdd(sessionId, _ => new HttpSession(sessionId));
+        }
+
+        public bool ContainsSession(string sessionId)
+        {
+            return httpSessions.ContainsKey(sessionId);
         }
     }
 }

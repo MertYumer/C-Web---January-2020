@@ -11,10 +11,13 @@
         public HttpSession(string id)
         {
             this.Id = id;
+            this.IsNew = true;
             this.sessionParameters = new Dictionary<string, object>();
         }
 
         public string Id { get; }
+
+        public bool IsNew { get; set; }
 
         public object GetParameter(string parameterName)
         {
