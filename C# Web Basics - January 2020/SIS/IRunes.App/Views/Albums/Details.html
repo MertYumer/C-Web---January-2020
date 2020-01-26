@@ -21,14 +21,15 @@
 </header>
 <hr class="bg-success" style="height: 2px" />
 <main>
-    <div class="album-details d-flex justify-content-between row">
-        <div class="album-data col-md-5">
-            <img src="@Model.Cover" class="img-thumbnail" />
-            <h1 class="text-center">Album Name: @Model.Name</h1>
-            <h1 class="text-center">Album Price: @Model.Price</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <img width="760" height="480" src=@Model.Cover />
+            <h2 class="text-center">Album Name: @Model.Name</h2>
+            <h2 class="text-center">Album Price: @Model.Price</h2>
+
             <div class="d-flex justify-content-between">
-                <a class="btn bg-success text-white" href="/Tracks/Create?albumId=@Model.Id">Create Track</a>
-                <a class="btn bg-success text-white" href="/Albums/All">Back To All</a>
+                <a class="btn btn-success" href="/Tracks/Create?albumId=@Model.Id">Create Track</a>
+                <a class="btn btn-success" href="/Albums/All">Back to All</a>
             </div>
         </div>
 

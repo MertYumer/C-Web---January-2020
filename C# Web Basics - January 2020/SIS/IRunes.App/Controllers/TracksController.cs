@@ -3,13 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
 
+    using IRunes.App.ViewModels.Tracks;
     using IRunes.Models;
     using IRunes.Services;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
 
     public class TracksController : Controller
@@ -28,9 +29,9 @@
         public IActionResult Create()
         {
             var albumId = this.Request.QueryData["albumId"].ToString();
-            ViewData["AlbumId"] = albumId;
+            var trackCreateViewModel = new TrackCreateViewModel{ AlbumId = albumId };
 
-            return this.View();
+            return this.View(trackCreateViewModel);
         }
 
         [Authorize]
@@ -83,10 +84,8 @@
                 return this.Redirect($"/Albums/Details?id={albumFromDb.Id}");
             }
 
-            this.ViewData["TrackName"] = WebUtility.UrlDecode(trackFromDb.Name);
-            this.ViewData["TrackLink"] = WebUtility.UrlDecode(trackFromDb.Link);
-            this.ViewData["TrackPrice"] = $"${trackFromDb.Price:f2}";
-            this.ViewData["AlbumId"] = albumFromDb.Id;
+            TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromDb);
+            trackDetailsViewModel.AlbumId = albumId;
 
             return this.View();
         }

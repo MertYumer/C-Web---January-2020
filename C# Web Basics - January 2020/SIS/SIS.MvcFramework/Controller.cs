@@ -1,6 +1,5 @@
 ﻿namespace SIS.MvcFramework
 {
-    using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
     using SIS.HTTP.Requests;
@@ -11,7 +10,7 @@
 
     public abstract class Controller
     {
-        private readonly IViewEngine viewEngine;
+        private IViewEngine viewEngine;
 
         protected Controller()
         {
@@ -57,10 +56,10 @@
             var viewName = view;
 
             var viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
-            viewContent = this.viewEngine.GetHtml(viewContent, model);
+            viewContent = this.viewEngine.GetHtml(viewContent, model, this.User);
 
             var layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
-            layoutContent = this.viewEngine.GetHtml(layoutContent, model);
+            layoutContent = this.viewEngine.GetHtml(layoutContent, model, this.User);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
             var htmlResult = new HtmlResult(layoutContent);

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
+
     using IRunes.App.ViewModels.Albums;
     using IRunes.Models;
     using IRunes.Services;
@@ -29,10 +29,7 @@
 
             if (allAlbums.Count != 0)
             {
-                return this.View(allAlbums
-                    .Select(ModelMapper
-                    .ProjectTo<AlbumAllViewModel>)
-                    .ToList());
+                return this.View(allAlbums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
             }
 
             return this.View(new List<AlbumAllViewModel>());
@@ -67,7 +64,7 @@
         [Authorize]
         public IActionResult Details()
         {
-            var albumId = this.Request.QueryData["albumId"].ToString();
+            var albumId = this.Request.QueryData["id"].ToString();
             var albumFromDb = this.albumService.GetAlbumById(albumId);
 
             var albumDetailsViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
@@ -76,31 +73,6 @@
             {
                 return this.Redirect("/Albums/All");
             }
-
-            this.ViewData["AlbumId"] = albumFromDb.Id;
-            this.ViewData["AlbumName"] = WebUtility.UrlDecode(albumFromDb.Name);
-            this.ViewData["AlbumCover"] = WebUtility.UrlDecode(albumFromDb.Cover);
-            this.ViewData["AlbumPrice"] = $"${albumFromDb.Price:f2}";
-
-            var tracks = albumFromDb.Tracks.ToList();
-            var tracksHtml = string.Empty;
-
-            if (!tracks.Any())
-            {
-                tracksHtml = "<p>Nothing to show...</p>" +
-                             Environment.NewLine +
-                             "<p>This album has no tracks added yet!</p>";
-            }
-
-            else
-            {
-                for (int i = 0; i < tracks.Count; i++)
-                {
-                    tracksHtml += $"<li>{i + 1}. <a class=\"text-primary font-weight-bold\" href=\"/Tracks/Details?albumId={tracks[i].AlbumId}&trackId={tracks[i].Id}\">" + WebUtility.UrlDecode(tracks[i].Name) + "</a></li>";
-                }
-            }
-
-            this.ViewData["AlbumTracks"] = tracksHtml;
 
             return this.View(albumDetailsViewModel);
         }

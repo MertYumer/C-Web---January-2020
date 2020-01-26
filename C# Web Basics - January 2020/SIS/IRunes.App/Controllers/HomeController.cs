@@ -14,6 +14,7 @@
         }
 
         public IActionResult Index()
+        
         {
             if (this.IsLoggedIn())
             {

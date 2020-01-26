@@ -6,8 +6,6 @@
 
     public static class ModelMapper
     {
-
-
         public static TDestination ProjectTo<TDestination>(object origin)
         {
             return (TDestination)MapObject(origin, typeof(TDestination));
@@ -47,8 +45,10 @@
 
                 else if (originProperty.PropertyType != destinationProperty.PropertyType)
                 {
-                    destinationProperty.SetValue(destinationInstance,
-                        Convert.ChangeType(originProperty.GetValue(originInstance), destinationProperty.PropertyType));
+                    destinationProperty
+                        .SetValue(destinationInstance,
+                        Convert.ChangeType(originProperty
+                            .GetValue(originInstance), destinationProperty.PropertyType));
                 }
 
                 else if (originProperty.PropertyType == destinationProperty.PropertyType)
@@ -63,7 +63,8 @@
 
                 var originCollection = (IEnumerable)originProperty.GetValue(originInstance);
 
-                var destinationElementType = destinationProperty.GetValue(destinationInstance)
+                var destinationElementType = destinationProperty
+                    .GetValue(destinationInstance)
                     .GetType()
                     .GetGenericArguments()[0];
 
