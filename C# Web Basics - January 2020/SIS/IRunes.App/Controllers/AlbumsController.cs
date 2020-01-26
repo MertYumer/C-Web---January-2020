@@ -27,21 +27,15 @@
         {
             ICollection<Album> allAlbums = this.albumService.GetAllAlbums();
 
-            if (!allAlbums.Any())
+            if (allAlbums.Count != 0)
             {
-                this.ViewData["Albums"] = "There are currently no albums.";
+                return this.View(allAlbums
+                    .Select(ModelMapper
+                    .ProjectTo<AlbumAllViewModel>)
+                    .ToList());
             }
 
-            else
-            {
-                this.ViewData["Albums"] =
-                string.Join("<br/>",
-                allAlbums
-                .Select(a => $"<a class=\"text-primary font-weight-bold\" href=/Albums/Details?albumId={a.Id}>{WebUtility.UrlDecode(a.Name)}</a>")
-                .ToList());
-            }
-
-            return this.View();
+            return this.View(new List<AlbumAllViewModel>());
         }
 
         [Authorize]
