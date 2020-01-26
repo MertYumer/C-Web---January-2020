@@ -11,15 +11,12 @@
 
     public abstract class Controller
     {
-        private IViewEngine viewEngine;
+        private readonly IViewEngine viewEngine;
 
         protected Controller()
         {
             this.viewEngine = new SisViewEngine();
-            this.ViewData = new Dictionary<string, object>();
         }
-
-        protected Dictionary<string, object> ViewData { get; set; }
 
         public Principal User =>
             this.Request.Session.ContainsParameter("principal")

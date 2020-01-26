@@ -21,22 +21,26 @@
 </header>
 <hr class="bg-success" style="height: 2px" />
 <main>
-    <div class="row">
-        <div class="col-md-6">
-            <img width="760" height="480" src=@Model.AlbumCover />
-            <h2 class="text-center">Album Name: @Model.AlbumName</h2>
-            <h2 class="text-center">Album Price: @Model.AlbumPrice</h2>
-
+    <div class="album-details d-flex justify-content-between row">
+        <div class="album-data col-md-5">
+            <img src="@Model.Cover" class="img-thumbnail" />
+            <h1 class="text-center">Album Name: @Model.Name</h1>
+            <h1 class="text-center">Album Price: @Model.Price</h1>
             <div class="d-flex justify-content-between">
-                <a class="btn btn-success" href="/Tracks/Create?albumId=@Model.AlbumId">Create Track</a>
-                <a class="btn btn-success" href="/Albums/All">Back to All</a>
+                <a class="btn bg-success text-white" href="/Tracks/Create?albumId=@Model.Id">Create Track</a>
+                <a class="btn bg-success text-white" href="/Albums/All">Back To All</a>
             </div>
         </div>
 
         <div class="col-md-6">
             <h2>Tracks</h2>
             <ul>
-                @Model.AlbumTracks
+                @for(int index = 0; index < Model.Tracks.Count; index++)
+                {
+                <li>
+                    <strong>@index+1</strong>. <a href="/Tracks/Details?albumId=@Model.Id&trackId=@Model.Tracks[index].Id"><i>@Model.Tracks[index].Name</i></a>
+                </li>
+                }
             </ul>
         </div>
     </div>

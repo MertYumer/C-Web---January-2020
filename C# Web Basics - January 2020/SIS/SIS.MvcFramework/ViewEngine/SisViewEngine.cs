@@ -1,11 +1,13 @@
 ﻿namespace SIS.MvcFramework.ViewEngine
 {
     using System;
+    using System.Collections;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
 
@@ -27,7 +29,7 @@ namespace AppViewCodeNamespace
     {{
         public string GetHtml(object model)
         {{
-            var Model = model as {(model == null ? "new {}" : "model as " + model.GetType().FullName)};
+            var Model = model as {(model == null ? "new {}" : "model as " + GetModelType(model))};
 
             var html = new StringBuilder();
 
@@ -41,6 +43,16 @@ namespace AppViewCodeNamespace
             var view = this.CompileAndInstance(code, model?.GetType().Assembly);
             var htmlResult = view?.GetHtml(model);
             return htmlResult;
+        }
+
+        private string GetModelType<T>(T model)
+        {
+            if (model is IEnumerable)
+            {
+                return $"IEnumerable<{model.GetType().GetGenericArguments()[0].FullName}>";
+            }
+
+            return model.GetType().FullName;
         }
 
         private string GetCSharpCode(string viewContent)
@@ -121,6 +133,7 @@ namespace AppViewCodeNamespace
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                 .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
                 .AddReferences(MetadataReference.CreateFromFile(typeof(IView).Assembly.Location))
+                .AddReferences(MetadataReference.CreateFromFile(Assembly.GetEntryAssembly().Location))
                 .AddReferences(MetadataReference.CreateFromFile(modelAssembly.Location));
 
             var netStandardAssembly = Assembly.Load(new AssemblyName("netstandard")).GetReferencedAssemblies();

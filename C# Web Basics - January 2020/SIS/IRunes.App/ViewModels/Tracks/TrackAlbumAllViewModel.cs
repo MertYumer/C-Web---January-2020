@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IRunes.App.ViewModels.Tracks
+﻿namespace IRunes.App.ViewModels.Tracks
 {
-    class TrackAlbumAllViewModel
+    public class TrackAlbumAllViewModel
     {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
     }
 }
