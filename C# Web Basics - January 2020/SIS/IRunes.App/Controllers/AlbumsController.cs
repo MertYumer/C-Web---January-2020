@@ -17,9 +17,9 @@
     {
         private readonly IAlbumService albumService;
 
-        public AlbumsController()
+        public AlbumsController(IAlbumService albumService)
         {
-            this.albumService = new AlbumService();
+            this.albumService = albumService;
         }
 
         [Authorize]
@@ -42,12 +42,9 @@
         }
 
         [Authorize]
-        [HttpPost(ActionName = "Create")]
-        public IActionResult CreateConfirm()
+        [HttpPost]
+        public IActionResult Create(string name, string cover)
         {
-            var name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
-            var cover = ((ISet<string>)this.Request.FormData["cover"]).FirstOrDefault();
-
             var album = new Album
             {
                 Id = Guid.NewGuid().ToString(),
@@ -62,10 +59,9 @@
         }
 
         [Authorize]
-        public IActionResult Details()
+        public IActionResult Details(string id)
         {
-            var albumId = this.Request.QueryData["id"].ToString();
-            var albumFromDb = this.albumService.GetAlbumById(albumId);
+            var albumFromDb = this.albumService.GetAlbumById(id);
 
             var albumDetailsViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
 

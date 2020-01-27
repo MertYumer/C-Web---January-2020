@@ -1,8 +1,6 @@
 ﻿namespace IRunes.App.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using IRunes.App.ViewModels.Tracks;
     using IRunes.Models;
@@ -19,58 +17,44 @@
 
         private readonly IAlbumService albumService;
 
-        public TracksController()
+        public TracksController(ITrackService trackService, IAlbumService albumService)
         {
-            this.trackService = new TrackService();
-            this.albumService = new AlbumService();
+            this.trackService = trackService;
+            this.albumService = albumService;
         }
 
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(string albumId)
         {
-            var albumId = this.Request.QueryData["albumId"].ToString();
             var trackCreateViewModel = new TrackCreateViewModel{ AlbumId = albumId };
 
             return this.View(trackCreateViewModel);
         }
 
         [Authorize]
-        [HttpPost(ActionName = "Create")]
-        public IActionResult CreateConfirm()
+        [HttpPost]
+        public IActionResult Create(TrackCreateInputModel model)
         {
-            var albumId = this.Request.QueryData["albumId"].ToString();
-
-            string name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
-            string link = ((ISet<string>)this.Request.FormData["link"]).FirstOrDefault();
-
-            if (!decimal.TryParse(((ISet<string>)this.Request.FormData["price"]).FirstOrDefault(), out decimal price))
-            {
-                return this.Redirect($"/Tracks/Create?albumId={albumId}");
-            }
-
             var track = new Track
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = name,
-                Link = link,
-                Price = price,
-                AlbumId = albumId
+                Name = model.Name,
+                Link = model.Link,
+                Price = model.Price,
+                AlbumId = model.AlbumId
             };
 
-            if (!this.albumService.AddTrackToAlbum(albumId, track))
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, track))
             {
                 return this.Redirect("/Albums/All");
             }
 
-            return this.Redirect($"/Albums/Details?albumId={albumId}");
+            return this.Redirect($"/Albums/Details?id={model.AlbumId}");
         }
 
         [Authorize]
-        public IActionResult Details()
+        public IActionResult Details(string albumId, string trackId)
         {
-            var albumId = this.Request.QueryData["albumId"].ToString();
-            var trackId = this.Request.QueryData["trackId"].ToString();
-
             var albumFromDb = this.albumService.GetAlbumById(albumId);
             var trackFromDb = this.trackService.GetTrackById(trackId);
 
@@ -87,7 +71,7 @@
             TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromDb);
             trackDetailsViewModel.AlbumId = albumId;
 
-            return this.View();
+            return this.View(trackDetailsViewModel);
         }
     }
 }

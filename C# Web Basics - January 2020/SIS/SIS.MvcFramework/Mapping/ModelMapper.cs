@@ -45,10 +45,9 @@
 
                 else if (originProperty.PropertyType != destinationProperty.PropertyType)
                 {
-                    destinationProperty
-                        .SetValue(destinationInstance,
-                        Convert.ChangeType(originProperty
-                            .GetValue(originInstance), destinationProperty.PropertyType));
+                    destinationProperty.SetValue(
+                        destinationInstance,
+                        Convert.ChangeType(originProperty.GetValue(originInstance), destinationProperty.PropertyType));
                 }
 
                 else if (originProperty.PropertyType == destinationProperty.PropertyType)

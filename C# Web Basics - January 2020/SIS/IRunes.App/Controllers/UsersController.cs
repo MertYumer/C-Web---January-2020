@@ -1,8 +1,6 @@
 ﻿namespace IRunes.App.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
 
@@ -17,9 +15,9 @@
     {
         private readonly IUserService userService;
 
-        public UsersController()
+        public UsersController(IUserService userService)
         {
-            this.userService = new UserService();
+            this.userService = userService;
         }
 
         public IActionResult Register()
@@ -27,14 +25,9 @@
             return this.View();
         }
 
-        [HttpPost(ActionName = "Register")]
-        public IActionResult RegisterConfirm()
+        [HttpPost]
+        public IActionResult Register(string username, string password, string confirmPassword, string email)
         {
-            var username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-            var password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-            var confirmPassword = ((ISet<string>)this.Request.FormData["confirmPassword"]).FirstOrDefault();
-            var email = ((ISet<string>)this.Request.FormData["email"]).FirstOrDefault();
-
             if (password != confirmPassword)
             {
                 return this.Redirect("/Users/Register");
@@ -58,11 +51,9 @@
             return this.View();
         }
 
-        [HttpPost(ActionName = "Login")]
-        public IActionResult LoginConfirm()
+        [HttpPost]
+        public IActionResult Login(string username, string password)
         {
-            var username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-            var password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
             var hashedPassword = this.HashPassword(password);
 
             var userFromDb = this.userService.GetUserByUsernameAndPassword(username, hashedPassword);

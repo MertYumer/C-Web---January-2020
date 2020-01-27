@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
 
     using SIS.Common;
     using SIS.HTTP.Common;
@@ -18,8 +19,8 @@
         {
             requestString.ThrowIfNullOrEmpty(nameof(requestString));
 
-            this.FormData = new Dictionary<string,object>();
-            this.QueryData = new Dictionary<string, object>();
+            this.FormData = new Dictionary<string, ISet<string>>();
+            this.QueryData = new Dictionary<string, ISet<string>>();
             this.Headers = new HttpHeaderCollection();
             this.Cookies = new HttpCookieCollection();
 
@@ -30,16 +31,16 @@
 
         public string Url { get; private set; }
 
-        public Dictionary<string, object> FormData { get; }
+        public Dictionary<string, ISet<string>> FormData { get; }
 
-        public Dictionary<string, object> QueryData { get; }
+        public Dictionary<string, ISet<string>> QueryData { get; }
 
         public IHttpHeaderCollection Headers { get; }
 
         public IHttpCookieCollection Cookies { get; }
 
         public HttpRequestMethod RequestMethod { get; private set; }
-        
+
         public IHttpSession Session { get; set; }
 
         private bool IsValidRequestLine(string[] requestLineParams)
@@ -113,37 +114,41 @@
         {
             if (this.HasQueryString())
             {
-                this.Url.Split('?', '#')[1]
+                var parameters = this.Url.Split('?', '#')[1]
                     .Split('&')
                     .Select(plainQueryParameter => plainQueryParameter.Split('='))
-                    .ToList()
-                    .ForEach(queryParameterKeyValuePair =>
-                        this.QueryData.Add(queryParameterKeyValuePair[0], queryParameterKeyValuePair[1]));
+                    .ToList();
+
+                foreach (var parameter in parameters)
+                {
+                    if (!this.QueryData.ContainsKey(parameter[0]))
+                    {
+                        this.QueryData.Add(parameter[0], new HashSet<string>());
+                    }
+
+                    this.QueryData[parameter[0]].Add(WebUtility.UrlDecode(parameter[1]));
+                }
             }
         }
 
         private void ParseRequestFormDataParameters(string requestBody)
         {
-            if (string.IsNullOrEmpty(requestBody) == false)
+            if (!string.IsNullOrEmpty(requestBody))
             {
-                //TODO: Parse Multiple Parameters By Name
-                var paramsPairs = requestBody
+                var parameters = requestBody
                    .Split('&')
                    .Select(plainQueryParameter => plainQueryParameter.Split('='))
                    .ToList();
 
-                foreach (var paramPair in paramsPairs)
+                foreach (var parameter in parameters)
                 {
-                    string key = paramPair[0];
-                    string value = paramPair[1];
-
-                    if (this.FormData.ContainsKey(key) == false)
+                    if (!this.FormData.ContainsKey(parameter[0]))
                     {
-                        this.FormData.Add(key, new HashSet<string>());
+                        this.FormData.Add(parameter[0], new HashSet<string>());
                     }
 
-                    ((ISet<string>)this.FormData[key]).Add(value);
-                }                
+                    this.FormData[parameter[0]].Add(WebUtility.UrlDecode(parameter[1]));
+                }
             }
         }
 

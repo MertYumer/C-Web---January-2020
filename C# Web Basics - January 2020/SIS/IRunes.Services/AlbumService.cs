@@ -11,9 +11,9 @@
     {
         private readonly RunesDbContext context;
 
-        public AlbumService()
+        public AlbumService(RunesDbContext runesDbContext)
         {
-            this.context = new RunesDbContext();
+            this.context = runesDbContext;
         }
 
         public ICollection<Album> GetAllAlbums()

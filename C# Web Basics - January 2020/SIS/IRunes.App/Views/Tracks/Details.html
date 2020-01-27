@@ -21,26 +21,17 @@
 </header>
 <hr class="bg-success" style="height: 2px" />
 <main>
-    <div class="jumbotron bg-success text-white">
-        <h1>Welcome, <span class="text-warning">@User.Username</span></h1>
-        <hr class="bg-white" style="height: 2px" />
-        <h2>IRunes wishes you a fun experience.</h2>
-    </div>
-</main>
-<hr class="bg-success" style="height: 2px" />
-<main>
     <div>
-        <h2 class="text-center">Track Name: @Model.TrackName</h2>
-        <h2 class="text-center">Track Price: @Model.TrackPrice</h2>
+        <h2 class="text-center">Track Name: @Model.Name</h2>
+        <h2 class="text-center">Track Price: @Model.Price</h2>
         <hr class="bg-success w-50" style="height: 2px" />
         <div class="d-flex justify-content-center">
-            <iframe width="790" height="400" src=@Model.TrackLink>
-            </iframe>
+            <iframe width="790" height="400" src="@Model.Link"></iframe>
         </div>
         <hr class="bg-success w-50" style="height: 2px" />
     </div>
 
     <div class="d-flex justify-content-center">
-        <a class="btn btn-success" href="/Albums/Details?albumId=@Model.AlbumId">Back To Album</a>
+        <a class="btn btn-success" href="/Albums/Details?id=@Model.AlbumId">Back To Album</a>
     </div>
 </main>
