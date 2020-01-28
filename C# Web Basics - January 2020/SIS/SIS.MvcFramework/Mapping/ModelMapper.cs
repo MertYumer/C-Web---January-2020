@@ -38,15 +38,15 @@
                 || originProperty.PropertyType == typeof(string)
                 || originProperty.PropertyType == typeof(decimal))
             {
-                if (originProperty.PropertyType != typeof(string) && destinationProperty.PropertyType == typeof(string))
+                if (originProperty.PropertyType != typeof(string) 
+                    && destinationProperty.PropertyType == typeof(string))
                 {
                     destinationProperty.SetValue(destinationInstance, originProperty.GetValue(originInstance).ToString());
                 }
 
                 else if (originProperty.PropertyType != destinationProperty.PropertyType)
                 {
-                    destinationProperty.SetValue(
-                        destinationInstance,
+                    destinationProperty.SetValue(destinationInstance,
                         Convert.ChangeType(originProperty.GetValue(originInstance), destinationProperty.PropertyType));
                 }
 

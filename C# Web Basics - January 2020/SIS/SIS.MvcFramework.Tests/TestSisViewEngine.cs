@@ -28,6 +28,8 @@
             }
             , new Identity.Principal() { });
 
+            actualResult = actualResult.Replace("\r\n", "\n");
+
             Assert.Equal(expectedResult.TrimEnd(), actualResult.TrimEnd());
         }
     }

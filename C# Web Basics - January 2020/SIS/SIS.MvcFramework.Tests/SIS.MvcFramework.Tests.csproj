@@ -19,13 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ViewTests\TestWithoutCSharpCode.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ViewTests\UseForForeachAndIf.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ViewTests\UseForForeachAndIf.Result.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ViewTests\TestWithoutCSharpCode.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ViewTests\TestWithoutCSharpCode.Result.html">

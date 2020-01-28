@@ -66,13 +66,41 @@ namespace AppViewCodeNamespace
             var cSharpCode = new StringBuilder();
             var supportedOperators = new[] { "for", "if", "else" };
             var cSharpCodeRegex = new Regex(@"[^\s<""\&]+", RegexOptions.Compiled);
+            var cSharpCodeDepth = 0;
 
             foreach (var line in lines)
             {
-                if (line.TrimStart().StartsWith("{") || line.TrimStart().StartsWith("}"))
+                if (line.TrimStart().StartsWith("@{"))
+                {
+                    cSharpCodeDepth++;
+                }
+
+                else if (line.TrimStart().StartsWith("{") || line.TrimStart().StartsWith("}"))
                 {
                     //{ / }
+                    if (cSharpCodeDepth > 0)
+                    {
+                        if (line.TrimStart().StartsWith("{"))
+                        {
+                            cSharpCodeDepth++;
+                        }
+
+                        else if (line.TrimStart().StartsWith("}"))
+                        {
+                            if ((--cSharpCodeDepth) == 0)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+
                     cSharpCode.AppendLine(line);
+                }
+
+                else if (cSharpCodeDepth > 0)
+                {
+                    cSharpCode.AppendLine(line);
+                    continue;
                 }
 
                 else if (supportedOperators.Any(x => line.TrimStart().StartsWith("@" + x)))
