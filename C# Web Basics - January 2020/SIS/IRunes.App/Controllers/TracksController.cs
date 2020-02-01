@@ -35,14 +35,12 @@
         [HttpPost]
         public IActionResult Create(TrackCreateInputModel model)
         {
-            var track = new Track
+            if (!this.ModelState.IsValid)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = model.Name,
-                Link = model.Link,
-                Price = model.Price,
-                AlbumId = model.AlbumId
-            };
+                return this.Redirect("/Albums/All");
+            }
+
+            var track = ModelMapper.ProjectTo<Track>(model);
 
             if (!this.albumService.AddTrackToAlbum(model.AlbumId, track))
             {
@@ -53,10 +51,15 @@
         }
 
         [Authorize]
-        public IActionResult Details(string albumId, string trackId)
+        public IActionResult Details(TrackDetailsInputModel model)
         {
-            var albumFromDb = this.albumService.GetAlbumById(albumId);
-            var trackFromDb = this.trackService.GetTrackById(trackId);
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect($"Albums/All");
+            }
+
+            var albumFromDb = this.albumService.GetAlbumById(model.AlbumId);
+            var trackFromDb = this.trackService.GetTrackById(model.TrackId);
 
             if (albumFromDb == null)
             {
@@ -69,7 +72,7 @@
             }
 
             TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromDb);
-            trackDetailsViewModel.AlbumId = albumId;
+            trackDetailsViewModel.AlbumId = model.AlbumId;
 
             return this.View(trackDetailsViewModel);
         }

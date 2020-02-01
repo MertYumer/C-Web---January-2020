@@ -18,6 +18,8 @@
     using SIS.MvcFramework.Sessions;
     using SIS.MvcFramework.Logging;
     using SIS.HTTP.Requests;
+    using SIS.MvcFramework.Validation;
+    using SIS.MvcFramework.Attributes.Validation;
 
     public static class WebHost
     {
@@ -177,6 +179,8 @@
                         }
                     }
 
+                    controllerInstance.ModelState = ValidateObject(paramaterValue);
+
                     parameterValues.Add(paramaterValue);
                 }
             }
@@ -208,6 +212,35 @@
             }
 
             return httpDataValue;
+        }
+
+        private static ModelStateDictionary ValidateObject(object value)
+        {
+            var modelState = new ModelStateDictionary();
+
+            var objectProperties = value.GetType().GetProperties();
+
+            foreach (var objectProperty in objectProperties)
+            {
+                var validationAttributes = objectProperty
+                    .GetCustomAttributes()
+                    .Where(type => type is ValidationSisAttribute)
+                    .Cast<ValidationSisAttribute>()
+                    .ToList();
+
+                foreach (var validationAttribute in validationAttributes)
+                {
+                    if (validationAttribute.IsValid(objectProperty.GetValue(value)))
+                    {
+                        continue;
+                    }
+
+                    modelState.IsValid = false;
+                    modelState.Add(objectProperty.Name, validationAttribute.ErrorMessage);
+                }
+            }
+
+            return modelState;
         }
     }
 }

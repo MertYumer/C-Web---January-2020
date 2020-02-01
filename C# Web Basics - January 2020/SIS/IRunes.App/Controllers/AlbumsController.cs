@@ -27,7 +27,7 @@
         {
             ICollection<Album> allAlbums = this.albumService.GetAllAlbums();
 
-            if (allAlbums.Count != 0)
+            if (allAlbums.Count > 0)
             {
                 return this.View(allAlbums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
             }
@@ -43,26 +43,23 @@
 
         [Authorize]
         [HttpPost]
-        public IActionResult Create(string name, string cover)
+        public IActionResult Create(AlbumCreateInputModel model)
         {
-            var album = new Album
+            if (!this.ModelState.IsValid)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = name,
-                Cover = cover,
-                Price = 0m
-            };
+                return this.Redirect("/Albums/Create");
+            }
 
+            var album = ModelMapper.ProjectTo<Album>(model);
             this.albumService.CreateAlbum(album);
 
             return this.Redirect("/Albums/All");
         }
 
         [Authorize]
-        public IActionResult Details(string id)
+        public IActionResult Details(AlbumDetailsInputModel model)
         {
-            var albumFromDb = this.albumService.GetAlbumById(id);
-
+            var albumFromDb = this.albumService.GetAlbumById(model.Id);
             var albumDetailsViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
 
             if (albumFromDb == null)

@@ -6,6 +6,7 @@
     using SIS.MvcFramework.Extensions;
     using SIS.MvcFramework.Identity;
     using SIS.MvcFramework.Result;
+    using SIS.MvcFramework.Validation;
     using SIS.MvcFramework.ViewEngine;
 
     public abstract class Controller
@@ -15,6 +16,7 @@
         protected Controller()
         {
             this.viewEngine = new SisViewEngine();
+            this.ModelState = new ModelStateDictionary();
         }
 
         public Principal User =>
@@ -23,6 +25,8 @@
             : null;
 
         public IHttpRequest Request { get; set; }
+
+        public ModelStateDictionary ModelState { get; set; }
 
         protected bool IsLoggedIn()
         {

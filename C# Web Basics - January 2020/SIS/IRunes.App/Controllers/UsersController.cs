@@ -4,11 +4,13 @@
     using System.Security.Cryptography;
     using System.Text;
 
+    using IRunes.App.ViewModels.Users;
     using IRunes.Models;
     using IRunes.Services;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Action;
     using SIS.MvcFramework.Attributes.Http;
+    using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
 
     public class UsersController : Controller
@@ -26,21 +28,19 @@
         }
 
         [HttpPost]
-        public IActionResult Register(string username, string password, string confirmPassword, string email)
+        public IActionResult Register(UserRegisterInputModel model)
         {
-            if (password != confirmPassword)
+            if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Users/Register");
             }
 
-            var user = new User
+            if (model.Password != model.ConfirmPassword)
             {
-                Id = Guid.NewGuid().ToString(),
-                Username = username,
-                Password = this.HashPassword(password),
-                Email = email
-            };
+                return this.Redirect("/Users/Register");
+            }
 
+            var user = ModelMapper.ProjectTo<User>(model);
             this.userService.CreateUser(user);
 
             return this.Redirect("/Users/Login");
@@ -52,11 +52,11 @@
         }
 
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public IActionResult Login(UserLoginInputModel model)
         {
-            var hashedPassword = this.HashPassword(password);
+            var hashedPassword = this.HashPassword(model.Password);
 
-            var userFromDb = this.userService.GetUserByUsernameAndPassword(username, hashedPassword);
+            var userFromDb = this.userService.GetUserByUsernameAndPassword(model.Username, hashedPassword);
 
             if (userFromDb == null)
             {
