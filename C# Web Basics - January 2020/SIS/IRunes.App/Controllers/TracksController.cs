@@ -1,7 +1,5 @@
 ﻿namespace IRunes.App.Controllers
 {
-    using System;
-
     using IRunes.App.ViewModels.Tracks;
     using IRunes.Models;
     using IRunes.Services;

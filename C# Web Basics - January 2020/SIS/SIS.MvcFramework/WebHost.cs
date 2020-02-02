@@ -23,6 +23,8 @@
 
     public static class WebHost
     {
+        private static readonly IControllerState controllerState = new ControllerState();
+
         public static void Start(IMvcApplication application)
         {
             IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
@@ -107,6 +109,7 @@
             IHttpRequest request)
         {
             var controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
+            controllerState.SetState(controllerInstance);
             controllerInstance.Request = request;
 
             //TODO: Refactor this
@@ -179,7 +182,12 @@
                         }
                     }
 
-                    controllerInstance.ModelState = ValidateObject(paramaterValue);
+                    if (request.RequestMethod == HttpRequestMethod.Post)
+                    {
+                        controllerState.Reset();
+                        controllerInstance.ModelState = ValidateObject(paramaterValue);
+                        controllerState.Initialize(controllerInstance);
+                    }
 
                     parameterValues.Add(paramaterValue);
                 }

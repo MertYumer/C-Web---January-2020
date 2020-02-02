@@ -1,6 +1,5 @@
 ﻿namespace IRunes.App.Controllers
 {
-    using System;
     using System.Security.Cryptography;
     using System.Text;
 
@@ -54,6 +53,11 @@
         [HttpPost]
         public IActionResult Login(UserLoginInputModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             var hashedPassword = this.HashPassword(model.Password);
 
             var userFromDb = this.userService.GetUserByUsernameAndPassword(model.Username, hashedPassword);

@@ -3,6 +3,7 @@
     <h1 class="text-success text-center">Register</h1>
     <hr class="bg-success w-50" style="height: 2px" />
     <form class="w-50 mx-auto" action="/Users/Register" method="POST">
+        @Widgets.ValidationWidget
         <div class="form-group">
             <label for="username">Username</label>
             <input class="form-control" type="text" id="username" name="username" placeholder="Username...">

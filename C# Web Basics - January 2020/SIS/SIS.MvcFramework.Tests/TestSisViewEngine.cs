@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
 
+    using SIS.MvcFramework.Validation;
     using SIS.MvcFramework.ViewEngine;
     using Xunit;
 
@@ -25,8 +26,9 @@
             {
                 StringValue = "str",
                 ListValues = new List<string> { "123", "val1", string.Empty }
-            }
-            , new Identity.Principal() { });
+            },
+            new ModelStateDictionary(), 
+            new Identity.Principal() { });
 
             actualResult = actualResult.Replace("\r\n", "\n");
 

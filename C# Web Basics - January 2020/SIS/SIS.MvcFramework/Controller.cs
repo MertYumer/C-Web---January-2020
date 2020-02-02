@@ -60,10 +60,10 @@
             var viewName = view;
 
             var viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
-            viewContent = this.viewEngine.GetHtml(viewContent, model, this.User);
+            viewContent = this.viewEngine.GetHtml(viewContent, model, this.ModelState, this.User);
 
             var layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
-            layoutContent = this.viewEngine.GetHtml(layoutContent, model, this.User);
+            layoutContent = this.viewEngine.GetHtml(layoutContent, model, this.ModelState, this.User);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
             var htmlResult = new HtmlResult(layoutContent);
