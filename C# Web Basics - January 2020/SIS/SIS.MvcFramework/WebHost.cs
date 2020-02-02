@@ -243,7 +243,6 @@
                         continue;
                     }
 
-                    modelState.IsValid = false;
                     modelState.Add(objectProperty.Name, validationAttribute.ErrorMessage);
                 }
             }

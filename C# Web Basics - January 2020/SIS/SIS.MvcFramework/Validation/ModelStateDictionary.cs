@@ -10,13 +10,13 @@
         public ModelStateDictionary()
         {
             this.errorMessages = new Dictionary<string, List<string>>();
-            this.IsValid = true;
         }
+
+        public bool IsValid
+            => this.ErrorMessages.Count == 0;
 
         public IReadOnlyDictionary<string, List<string>> ErrorMessages
             => this.errorMessages.ToImmutableDictionary();
-
-        public bool IsValid { get; set; }
 
         public void Add(string propertyName, string errorMessage)
         {
