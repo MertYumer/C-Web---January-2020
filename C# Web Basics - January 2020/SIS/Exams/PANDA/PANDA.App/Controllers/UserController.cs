@@ -1,14 +1,15 @@
-﻿namespace IRunes.App.Controllers
+﻿namespace PANDA.Web.Controllers
 {
     using System.Security.Cryptography;
     using System.Text;
 
-    using IRunes.App.ViewModels.Users;
-    using IRunes.Models;
-    using IRunes.Services;
+    using PANDA.Models;
+    using PANDA.Services;
+    using PANDA.Web.ViewModels.Users;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Action;
     using SIS.MvcFramework.Attributes.Http;
+    using SIS.MvcFramework.Attributes.Security;
     using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
 
@@ -40,9 +41,12 @@
             }
 
             var user = ModelMapper.ProjectTo<User>(model);
-            this.userService.CreateUser(user);
+            user.Password = this.HashPassword(model.Password);
 
-            return this.Redirect("/Users/Login");
+            this.userService.CreateUser(user);
+            this.SignIn(user.Id, user.Username, user.Password);
+
+            return this.Redirect("/");
         }
 
         public IActionResult Login()
@@ -72,6 +76,7 @@
             return this.Redirect("/");
         }
 
+        [Authorize]
         public IActionResult Logout()
         {
             this.SignOut();

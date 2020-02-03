@@ -8,7 +8,7 @@
         public string Id { get; set; }
 
         [Required]
-        [MaxLength(20), MinLength(3)]
+        [MinLength(3), MaxLength(20)]
         public string Username { get; set; }
 
         [Required]

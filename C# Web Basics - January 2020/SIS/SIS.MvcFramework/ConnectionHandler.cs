@@ -71,18 +71,23 @@
 
         private IHttpResponse ReturnIfResource(IHttpRequest httpRequest)
         {
-            string assemblyFolderPath = Assembly.GetExecutingAssembly().Location;
-            string folderPrefix = "/../../../../";
-            string resourceFolder = "Resources/";
+            string folderPrefix = "/../";
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            string resourceFolderPath = "Resources/";
+            string requestedResource = httpRequest.Path;
 
-            string fullPath = assemblyFolderPath + folderPrefix + resourceFolder + httpRequest.Path;
+            string fullPathToResource = assemblyLocation + folderPrefix + resourceFolderPath + requestedResource;
 
-            if (File.Exists(fullPath))
+            if (File.Exists(fullPathToResource))
             {
-                return new InlineResourceResult(File.ReadAllBytes(fullPath), HttpResponseStatusCode.Found);
+                byte[] content = File.ReadAllBytes(fullPathToResource);
+                return new InlineResourceResult(content, HttpResponseStatusCode.Ok);
             }
 
-            return new TextResult($"Cannot found resource on path {fullPath}", HttpResponseStatusCode.NotFound);
+            else
+            {
+                return new TextResult($"Route with method {httpRequest.RequestMethod} and path \"{httpRequest.Path}\" not found.", HttpResponseStatusCode.NotFound);
+            }
         }
 
         private IHttpResponse HandleRequest(IHttpRequest httpRequest)
@@ -170,6 +175,7 @@
             {
                 httpResponse = new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError);
             }
+
             this.PrepareResponse(httpResponse);
 
             this.client.Shutdown(SocketShutdown.Both);
