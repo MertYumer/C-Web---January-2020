@@ -1,5 +1,6 @@
 ﻿namespace PANDA.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using PANDA.Data;
@@ -26,9 +27,21 @@
         {
             var user = this.context
                 .Users
-                .SingleOrDefault(u => (u.Username == username || u.Email == username) && u.Password == password);
+                .SingleOrDefault(u => 
+                (u.Username == username || u.Email == username)
+                && u.Password == password);
 
             return user;
+        }
+
+        public IEnumerable<string> GetUsernames()
+        {
+            var usernames = this.context
+                .Users
+                .Select(x => x.Username)
+                .ToList();
+
+            return usernames;
         }
     }
 }

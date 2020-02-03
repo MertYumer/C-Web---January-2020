@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PANDA.Services
+﻿namespace PANDA.Services
 {
-    interface IReceiptService
+    public interface IReceiptService
     {
     }
 }

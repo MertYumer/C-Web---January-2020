@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PANDA.Services
+﻿namespace PANDA.Services
 {
-    interface IPackageService
+    using System.Linq;
+
+
+    using PANDA.Models;
+
+    public interface IPackageService
     {
+        bool CreatePackage(string description, decimal weight, string shippingAddress, string recipientName);
+
+        IQueryable<Package> GetAllByStatus(PackageStatus status);
     }
 }

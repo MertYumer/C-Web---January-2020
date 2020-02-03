@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SIS.MvcFramework\SIS.MvcFramework.csproj" />
     <ProjectReference Include="..\PANDA.Data\PANDA.Data.csproj" />
     <ProjectReference Include="..\PANDA.Models\PANDA.Models.csproj" />
   </ItemGroup>

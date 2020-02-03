@@ -1,6 +1,6 @@
 ﻿namespace PANDA.Web.Controllers
 {
-    public class ReceiptController
+    public class ReceiptsController
     {
     }
 }

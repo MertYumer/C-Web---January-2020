@@ -19,6 +19,8 @@
         public void ConfigureServices(IServiceProvider serviceProvider)
         {
             serviceProvider.Add<IUserService, UserService>();
+            serviceProvider.Add<IPackageService, PackageService>();
+            serviceProvider.Add<IReceiptService, ReceiptService>();
         }
     }
 }
