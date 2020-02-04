@@ -1,17 +1,19 @@
 ﻿namespace PANDA.Services
 {
+    using System.Linq;
+
     using PANDA.Data;
     using PANDA.Models;
-    using SIS.MvcFramework.Mapping;
-    using System.Linq;
 
     public class PackageService : IPackageService
     {
         private readonly PandaDbContext context;
+        private readonly IReceiptService receiptService;
 
-        public PackageService(PandaDbContext context)
+        public PackageService(PandaDbContext context, IReceiptService receiptService)
         {
             this.context = context;
+            this.receiptService = receiptService;
         }
 
         public bool CreatePackage(string description, decimal weight, string shippingAddress, string recipientName)
@@ -36,8 +38,8 @@
                 RecipientId = userId,
             };
 
-            package = context.Packages.Add(package).Entity;
-            context.SaveChanges();
+            this.context.Packages.Add(package);
+            this.context.SaveChanges();
 
             return true;
         }
@@ -49,6 +51,23 @@
                 .Where(x => x.Status == status);
 
             return packages;
+        }
+
+        public void Deliver(string id)
+        {
+            var package = this.context
+                .Packages
+                .FirstOrDefault(p => p.Id == id);
+
+            if (package == null)
+            {
+                return;
+            }
+
+            package.Status = PackageStatus.Delivered;
+            this.context.SaveChanges();
+
+            this.receiptService.CreateFromPackage(package.Id, package.RecipientId, package.Weight);
         }
     }
 }

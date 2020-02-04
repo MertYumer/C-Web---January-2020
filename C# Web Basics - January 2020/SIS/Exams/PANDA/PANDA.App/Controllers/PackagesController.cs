@@ -1,14 +1,14 @@
 ﻿namespace PANDA.Web.Controllers
 {
+    using System.Linq;
+
     using PANDA.Models;
     using PANDA.Services;
     using PANDA.Web.ViewModels.Packages;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Attributes.Security;
-    using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
-    using System.Linq;
 
     public class PackagesController : Controller
     {
@@ -52,12 +52,43 @@
         [Authorize]
         public IActionResult Pending()
         {
-            var modelPackages = this.packageService
-                .GetAllByStatus(PackageStatus.Pending)
-                .Select(ModelMapper.ProjectTo<PackageViewModel>)
+            var packages = this.packageService.GetAllByStatus(PackageStatus.Pending)
+                .Select(x => new PackageViewModel
+                {
+                    Description = x.Description,
+                    Id = x.Id,
+                    Weight = x.Weight,
+                    ShippingAddress = x.ShippingAddress,
+                    RecipientName = x.Recipient.Username,
+                })
                 .ToList();
 
-            return this.View(new PackagesListViewModel { Packages = modelPackages });
+            return this.View(new PackagesListViewModel { Packages = packages });
+        }
+
+        [Authorize]
+        public IActionResult Delivered()
+        {
+            var packages = this.packageService.GetAllByStatus(PackageStatus.Delivered)
+                .Select(x => new PackageViewModel
+                {
+                    Description = x.Description,
+                    Id = x.Id,
+                    Weight = x.Weight,
+                    ShippingAddress = x.ShippingAddress,
+                    RecipientName = x.Recipient.Username,
+                })
+                .ToList();
+
+            return this.View(new PackagesListViewModel { Packages = packages });
+        }
+
+        [Authorize]
+        public IActionResult Deliver(string id)
+        {
+            this.packageService.Deliver(id);
+
+            return this.Redirect("/Packages/Delivered");
         }
     }
 }
