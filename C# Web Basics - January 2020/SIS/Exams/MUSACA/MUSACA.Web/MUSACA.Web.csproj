@@ -8,19 +8,20 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\SIS.MvcFramework\SIS.MvcFramework.csproj" />
     <ProjectReference Include="..\MUSACA.Data\MUSACA.Data.csproj" />
+    <ProjectReference Include="..\MUSACA.Services\MUSACA.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Resources\css\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\product-create.html">
+    <None Update="Views\Products\Create.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\products-all.html">
+    <None Update="Views\Products\All.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\profile.html">
+    <None Update="Views\Users\Profile.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\css\reset-css.css">
