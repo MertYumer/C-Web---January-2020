@@ -1,24 +1,30 @@
 ﻿namespace MUSACA.Web.Controllers
 {
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
+
     using MUSACA.Models;
     using MUSACA.Services;
     using MUSACA.Web.BindingModels.Users;
+    using MUSACA.Web.ViewModels.Orders;
+    using MUSACA.Web.ViewModels.Users;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Action;
     using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Attributes.Security;
     using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
-    using System.Security.Cryptography;
-    using System.Text;
 
     public class UsersController : Controller
     {
         private readonly IUserService userService;
+        private readonly IOrderService orderService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IOrderService orderService)
         {
             this.userService = userService;
+            this.orderService = orderService;
         }
 
         public IActionResult Register()
@@ -43,6 +49,7 @@
             user.Password = this.HashPassword(model.Password);
 
             this.userService.CreateUser(user);
+            this.orderService.CreateOrder(new Order { CashierId = user.Id });
             this.SignIn(user.Id, user.Username, user.Password);
 
             return this.Redirect("/");
@@ -85,7 +92,14 @@
         [Authorize]
         public IActionResult Profile()
         {
-            return this.View();
+            var orders = this.orderService.GetAllCompletedOrdersByCashierId(this.User.Id);
+
+            var userProfileViewModel = new UserProfileViewModel();
+            userProfileViewModel.Orders = orders
+                .Select(ModelMapper.ProjectTo<OrderProfileViewModel>)
+                .ToList();
+
+            return this.View(userProfileViewModel);
         }
 
         [NonAction]

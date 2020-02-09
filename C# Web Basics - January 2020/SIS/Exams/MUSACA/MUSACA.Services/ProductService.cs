@@ -1,6 +1,5 @@
 ﻿namespace MUSACA.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -28,6 +27,15 @@
         {
             var products = this.context.Products.ToList();
             return products;
+        }
+
+        public Product GetProductByName(string productName)
+        {
+            var product = this.context
+                .Products
+                .SingleOrDefault(p => p.Name == productName);
+
+            return product;
         }
     }
 }

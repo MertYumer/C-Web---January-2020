@@ -15,10 +15,12 @@
     public class ProductsController : Controller
     {
         private readonly IProductService productService;
+        private readonly IOrderService orderService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IOrderService orderService)
         {
             this.productService = productService;
+            this.orderService = orderService;
         }
 
         [Authorize]
@@ -51,6 +53,17 @@
             this.productService.CreateProduct(product);
 
             return this.Redirect("/Products/All");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Order(ProductOrderBindingModel productOrderBindingModel)
+        {
+            Product productToOrder = this.productService.GetProductByName(productOrderBindingModel.Product);
+
+            this.orderService.AddProductToCurrentActiveOrder(productToOrder.Id, this.User.Id);
+
+            return this.Redirect("/");
         }
     }
 }

@@ -9,5 +9,7 @@
         ICollection<Product> GetAllProducts();
 
         Product CreateProduct(Product product);
+
+        Product GetProductByName(string productName);
     }
 }

@@ -10,6 +10,7 @@
         public Order()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.Status = OrderStatus.Active;
             this.Products = new HashSet<Product>();
         }
 

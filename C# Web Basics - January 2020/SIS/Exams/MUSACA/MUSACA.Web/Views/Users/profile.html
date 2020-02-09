@@ -12,18 +12,15 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach(var order in Model.Orders)
+                {
                 <tr class="row">
-                    <th scope="row" class="col-lg-5 d-flex justify-content-center"><h5>fbb536f4-7463-41d2-8650-4d1c87de722b</h5></th>
-                    <td class="col-lg-2 d-flex justify-content-center"><h5>$15.06</h5></td>
-                    <td class="col-lg-2 d-flex justify-content-center"><h5>26/09/2019</h5></td>
-                    <td class="col-lg-3 d-flex justify-content-center"><h5>Pesho</h5></td>
+                    <th scope="row" class="col-lg-5 d-flex justify-content-center"><h5>@order.Id</h5></th>
+                    <td class="col-lg-2 d-flex justify-content-center"><h5>@order.Total</h5></td>
+                    <td class="col-lg-2 d-flex justify-content-center"><h5>@order.IssuedOnDate</h5></td>
+                    <td class="col-lg-3 d-flex justify-content-center"><h5>@order.CashierName</h5></td>
                 </tr>
-                <tr class="row">
-                    <th scope="row" class="col-lg-5 d-flex justify-content-center"><h5>7c62da68-3875-44ba-815d-99518039b946</h5></th>
-                    <td class="col-lg-2 d-flex justify-content-center"><h5>$13.82</h5></td>
-                    <td class="col-lg-2 d-flex justify-content-center"><h5>15/11/2018</h5></td>
-                    <td class="col-lg-3 d-flex justify-content-center"><h5>Pesho</h5></td>
-                </tr>
+                }
             </tbody>
         </table>
     </div>
