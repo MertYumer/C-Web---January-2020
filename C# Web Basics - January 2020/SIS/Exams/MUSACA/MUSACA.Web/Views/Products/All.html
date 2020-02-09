@@ -6,9 +6,9 @@
     <div class="products">
         @for(int i = 0; i < products.Count; i++)
         {
-            @if(i % 3 == 0)
-            {
-            <div class="product-row d-flex justify-content-between mt-4">
+        @if(i % 3 == 0)
+        {
+        <div class="product-row d-flex justify-content-between mt-4">
             }
             <div class="product border-musaca p-3 w-25">
                 <div class="text-holder d-flex justify-content-between">
@@ -22,8 +22,8 @@
             </div>
             @if(i % 3 == 2)
             {
-            </div>
-            }
+        </div>
+        }
         }
     </div>
 </main>

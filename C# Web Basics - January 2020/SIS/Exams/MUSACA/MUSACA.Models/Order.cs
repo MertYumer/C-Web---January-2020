@@ -11,7 +11,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Status = OrderStatus.Active;
-            this.Products = new HashSet<Product>();
+            this.Products = new HashSet<OrderProduct>();
         }
 
         public string Id { get; set; }
@@ -20,7 +20,7 @@
 
         public DateTime IssuedOn { get; set; }
 
-        public ICollection<Product> Products { get; set; }
+        public ICollection<OrderProduct> Products { get; set; }
 
         [Required]
         [ForeignKey("Cashier")]

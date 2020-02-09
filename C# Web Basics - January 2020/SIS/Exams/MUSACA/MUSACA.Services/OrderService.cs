@@ -22,6 +22,7 @@
             var orders = this.context
                 .Orders
                 .Include(o => o.Products)
+                .ThenInclude(op => op.Product)
                 .Include(o => o.Cashier)
                 .Where(o => o.CashierId == userId)
                 .Where(o => o.Status == OrderStatus.Completed)
@@ -35,6 +36,7 @@
             var order = context
                 .Orders
                 .Include(o => o.Products)
+                .ThenInclude(op => op.Product)
                 .Include(o => o.Cashier)
                 .SingleOrDefault(o => o.CashierId == userId && o.Status == OrderStatus.Active);
 
@@ -58,12 +60,15 @@
 
         public bool AddProductToCurrentActiveOrder(string productId, string userId)
         {
-            var product = this.context
+            var productFromDb = this.context
                 .Products
                 .SingleOrDefault(product => product.Id == productId);
 
             var activeOrder = this.GetActiveOrderByCashierId(userId);
-            activeOrder.Products.Add(product);
+            activeOrder.Products.Add(new OrderProduct
+            {
+                Product = productFromDb
+            });
 
             this.context.Update(activeOrder);
             this.context.SaveChanges();

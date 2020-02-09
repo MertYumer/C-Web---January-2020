@@ -86,18 +86,33 @@
         public IActionResult Logout()
         {
             this.SignOut();
+
             return this.Redirect("/");
         }
 
         [Authorize]
         public IActionResult Profile()
         {
-            var orders = this.orderService.GetAllCompletedOrdersByCashierId(this.User.Id);
+            var ordersFromDb = this.orderService.GetAllCompletedOrdersByCashierId(this.User.Id);
 
             var userProfileViewModel = new UserProfileViewModel();
-            userProfileViewModel.Orders = orders
-                .Select(ModelMapper.ProjectTo<OrderProfileViewModel>)
+
+            userProfileViewModel.Orders = ordersFromDb
+                .To<OrderProfileViewModel>()
                 .ToList();
+
+            foreach (var order in userProfileViewModel.Orders)
+            {
+                var orderFromDb = ordersFromDb.SingleOrDefault(o => o.Id == order.Id);
+
+                order.Total = ordersFromDb
+                    .Where(o => o.Id == order.Id)
+                    .SelectMany(o => o.Products)
+                    .Sum(p => p.Product.Price).ToString();
+
+                order.IssuedOnDate = orderFromDb.IssuedOn.ToString("dd/MM/yyyy");
+                order.CashierName = this.User.Username;
+            }
 
             return this.View(userProfileViewModel);
         }

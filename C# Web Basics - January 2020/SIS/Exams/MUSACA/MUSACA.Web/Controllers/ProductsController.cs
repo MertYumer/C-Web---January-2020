@@ -28,7 +28,7 @@
         {
             var products = this.productService
                 .GetAllProducts()
-                .Select(ModelMapper.ProjectTo<ProductAllViewModel>)
+                .To<ProductAllViewModel>()
                 .ToList();
 
             return this.View(products);
@@ -61,7 +61,10 @@
         {
             Product productToOrder = this.productService.GetProductByName(productOrderBindingModel.Product);
 
-            this.orderService.AddProductToCurrentActiveOrder(productToOrder.Id, this.User.Id);
+            if (productToOrder != null)
+            {
+                this.orderService.AddProductToCurrentActiveOrder(productToOrder.Id, this.User.Id);
+            }
 
             return this.Redirect("/");
         }

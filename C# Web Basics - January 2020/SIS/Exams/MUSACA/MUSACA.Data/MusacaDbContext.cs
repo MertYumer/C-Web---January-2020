@@ -15,6 +15,9 @@
 
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(DatabaseConfiguration.ConnectionString);
@@ -23,6 +26,15 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Order>()
+                .HasMany(order => order.Products)
+                .WithOne(orderProduct => orderProduct.Order)
+                .HasForeignKey(orderProduct => orderProduct.OrderId);
+
+            modelBuilder.Entity<OrderProduct>()
+                .HasKey(orderProduct => new { orderProduct.OrderId, orderProduct.ProductId });
+
+
             base.OnModelCreating(modelBuilder);
         }
     }

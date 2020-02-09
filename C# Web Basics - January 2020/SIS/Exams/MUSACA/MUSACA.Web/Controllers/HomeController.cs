@@ -1,6 +1,5 @@
 ﻿namespace MUSACA.Web.Controllers
 {
-    using MUSACA.Models;
     using MUSACA.Services;
     using MUSACA.Web.ViewModels.Orders;
     using MUSACA.Web.ViewModels.Products;
@@ -28,7 +27,24 @@
         {
             var orderHomeViewModel = new OrderHomeViewModel();
 
+            if (this.IsLoggedIn())
+            {
+                var activeOrder = this.orderService
+                    .GetActiveOrderByCashierId(User.Id);
 
+                orderHomeViewModel = activeOrder.To<OrderHomeViewModel>();
+
+                orderHomeViewModel.Products.Clear();
+
+                foreach (var orderProduct in activeOrder.Products)
+                {
+                    ProductHomeViewModel productHomeViewModel = orderProduct
+                        .Product
+                        .To<ProductHomeViewModel>();
+
+                    orderHomeViewModel.Products.Add(productHomeViewModel);
+                }
+            }
 
             return this.View(orderHomeViewModel);
         }
