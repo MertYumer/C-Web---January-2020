@@ -17,7 +17,6 @@
 
         public DbSet<OrderProduct> OrderProducts { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(DatabaseConfiguration.ConnectionString);
@@ -33,7 +32,6 @@
 
             modelBuilder.Entity<OrderProduct>()
                 .HasKey(orderProduct => new { orderProduct.OrderId, orderProduct.ProductId });
-
 
             base.OnModelCreating(modelBuilder);
         }
