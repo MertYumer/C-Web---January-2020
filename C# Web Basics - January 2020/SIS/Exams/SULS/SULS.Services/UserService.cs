@@ -14,12 +14,12 @@
             this.context = context;
         }
 
-        public User CreateUser(User user)
+        public bool CreateUser(User user)
         {
-            user = this.context.Users.Add(user).Entity;
+            this.context.Users.Add(user);
             this.context.SaveChanges();
 
-            return user;
+            return true;
         }
 
         public User GetUserByUsernameAndPassword(string username, string password)

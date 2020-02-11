@@ -47,7 +47,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.Redirect($"/Submissions/Create?submissionId={model.ProblemId}");
+                return this.Redirect($"/Submissions/Create?problemId={model.ProblemId}");
             }
 
             var problemFromDb = this.problemService.GetProblemById(model.ProblemId);

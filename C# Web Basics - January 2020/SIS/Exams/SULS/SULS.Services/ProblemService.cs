@@ -16,12 +16,12 @@
             this.context = context;
         }
 
-        public Problem CreateProblem(Problem problem)
+        public bool CreateProblem(Problem problem)
         {
-            problem = this.context.Problems.Add(problem).Entity;
+            this.context.Problems.Add(problem);
             this.context.SaveChanges();
 
-            return problem;
+            return true;
         }
 
         public ICollection<Problem> GetAllProblems()

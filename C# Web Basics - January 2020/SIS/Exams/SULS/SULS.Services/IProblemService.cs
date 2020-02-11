@@ -6,7 +6,7 @@
 
     public interface IProblemService
     {
-        Problem CreateProblem(Problem problem);
+        bool CreateProblem(Problem problem);
 
         ICollection<Problem> GetAllProblems();
 
