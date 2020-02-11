@@ -30,9 +30,6 @@
     <None Update="Views\Home\Index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Home\IndexLoggedIn.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Views\Problems\Create.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -51,10 +48,6 @@
     <None Update="Views\_Layout.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>

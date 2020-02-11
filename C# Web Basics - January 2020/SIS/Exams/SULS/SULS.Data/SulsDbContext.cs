@@ -23,6 +23,10 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Submission>().HasOne(s => s.Problem);
+
+            modelBuilder.Entity<Submission>().HasOne(s => s.User);
+
             base.OnModelCreating(modelBuilder);
         }
     }
