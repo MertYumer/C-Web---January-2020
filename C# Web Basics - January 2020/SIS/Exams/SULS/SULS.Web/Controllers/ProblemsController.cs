@@ -1,5 +1,7 @@
 ﻿namespace SULS.Web.Controllers
 {
+    using System.Linq;
+
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Attributes.Security;
@@ -9,7 +11,6 @@
     using SULS.Services;
     using SULS.Web.BindingModels.Problems;
     using SULS.Web.ViewModels.Problems;
-    using System.Linq;
 
     public class ProblemsController : Controller
     {
@@ -52,15 +53,20 @@
 
             var submissionsFromDb = this.problemService.GetAllProblemSubmissions(problemId);
 
-            var problemDetailsViewModel = submissionsFromDb
-                .Select(s => new ProblemDetailsViewModel
+            var problemDetailsViewModel = new ProblemDetailsViewModel
+            {
+                Name = problemFromDb.Name,
+                Submissions = submissionsFromDb
+                .Select(s => new ViewModels.Submissions.SubmissionDetailsViewModel
                 {
-                    Username = this.User.Username,
+                    Id = s.Id,
+                    Username = s.User.Username,
                     AchievedResult = s.AchievedResult.ToString(),
                     CreatedOn = s.CreatedOn.ToString("dd/MM/yyyy"),
-                    MaxPoints = s.Problem.Points.ToString(),
+                    MaxPoints = s.Problem.Points.ToString()
                 })
-                .ToList();
+                .ToList()
+            };
 
             return this.View(problemDetailsViewModel);
         }

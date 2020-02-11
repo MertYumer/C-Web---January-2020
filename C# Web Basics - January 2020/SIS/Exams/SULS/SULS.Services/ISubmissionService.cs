@@ -4,6 +4,8 @@
 
     public interface ISubmissionService
     {
-        bool CreateSubmission(Submission submission, string userId);
+        bool CreateSubmission(Submission submission);
+
+        bool DeleteSubmission(string submissionId);
     }
 }

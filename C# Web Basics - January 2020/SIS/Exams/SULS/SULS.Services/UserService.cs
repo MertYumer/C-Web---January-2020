@@ -1,6 +1,5 @@
 ﻿namespace SULS.Services
 {
-    using System;
     using System.Linq;
 
     using SULS.Data;

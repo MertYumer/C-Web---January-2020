@@ -7,6 +7,12 @@
         private const string CodeErrorMessage = "Code must be between than 50 and 800.";
 
         [RequiredSis]
+        public string ProblemId { get; set; }
+
+        [RequiredSis]
+        public string UserId { get; set; }
+
+        [RequiredSis]
         [StringLengthSis(30, 800, CodeErrorMessage)]
         public string Code { get; set; }
     }

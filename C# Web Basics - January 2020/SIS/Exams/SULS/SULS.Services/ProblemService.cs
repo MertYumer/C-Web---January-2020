@@ -1,11 +1,11 @@
 ﻿namespace SULS.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.EntityFrameworkCore;
     using SULS.Data;
     using SULS.Models;
-    using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
 
     public class ProblemService : IProblemService
     {
@@ -36,6 +36,7 @@
             var submissions = this.context
                 .Submissions
                 .Include(s => s.Problem)
+                .Include(s => s.User)
                 .Where(s => s.ProblemId == problemId)
                 .ToList();
 

@@ -1,11 +1,10 @@
 ﻿namespace SULS.Web.Controllers
 {
     using System;
-    using System.Linq;
+
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes.Http;
     using SIS.MvcFramework.Attributes.Security;
-    using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Result;
     using SULS.Models;
     using SULS.Services;
@@ -48,11 +47,10 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.Redirect("/Submissions/Create");
+                return this.Redirect($"/Submissions/Create?submissionId={model.ProblemId}");
             }
 
-            var problemId = this.Request.FormData["ProblemId"].FirstOrDefault();
-            var problemFromDb = this.problemService.GetProblemById(problemId);
+            var problemFromDb = this.problemService.GetProblemById(model.ProblemId);
 
             var random = new Random();
             var achievedResult = random.Next(0, problemFromDb.Points);
@@ -62,10 +60,19 @@
                 Code = model.Code,
                 AchievedResult = achievedResult,
                 CreatedOn = DateTime.UtcNow,
-                ProblemId = problemId
+                ProblemId = model.ProblemId,
+                UserId = model.UserId
             };
 
-            this.submissionService.CreateSubmission(submission, this.User.Id);
+            this.submissionService.CreateSubmission(submission);
+
+            return this.Redirect("/");
+        }
+
+        [Authorize]
+        public IActionResult Delete(string submissionId)
+        {
+            this.submissionService.DeleteSubmission(submissionId);
 
             return this.Redirect("/");
         }

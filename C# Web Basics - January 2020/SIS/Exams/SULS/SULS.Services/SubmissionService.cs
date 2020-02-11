@@ -14,12 +14,26 @@
             this.context = context;
         }
 
-        public bool CreateSubmission(Submission submission, string userId)
+        public bool CreateSubmission(Submission submission)
         {
-            var userFromDb = this.context.Users.SingleOrDefault(u => u.Id == userId);
-            submission.User = userFromDb;
-
             this.context.Submissions.Add(submission);
+            this.context.SaveChanges();
+
+            return true;
+        }
+
+        public bool DeleteSubmission(string submissionId)
+        {
+            var submission = this.context
+                .Submissions
+                .SingleOrDefault(s => s.Id == submissionId);
+
+            if (submission == null)
+            {
+                return false;
+            }
+
+            this.context.Submissions.Remove(submission);
             this.context.SaveChanges();
 
             return true;

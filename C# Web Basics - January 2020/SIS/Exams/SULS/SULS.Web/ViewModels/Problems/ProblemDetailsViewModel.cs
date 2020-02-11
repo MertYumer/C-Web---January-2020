@@ -1,15 +1,18 @@
 ﻿namespace SULS.Web.ViewModels.Problems
 {
+    using System.Collections.Generic;
+
+    using SULS.Web.ViewModels.Submissions;
+
     public class ProblemDetailsViewModel
     {
-        public string Username { get; set; }
+        public ProblemDetailsViewModel()
+        {
+            this.Submissions = new List<SubmissionDetailsViewModel>();
+        }
 
-        public string AchievedResult { get; set; }
+        public string Name { get; set; }
 
-        public string CreatedOn { get; set; }
-
-        public string MaxPoints { get; set; }
-
-        public string SubmissionId { get; set; }
+        public ICollection<SubmissionDetailsViewModel> Submissions { get; set; }
     }
 }
