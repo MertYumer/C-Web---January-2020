@@ -1,10 +1,16 @@
 ﻿namespace IRunes.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class Album
     {
+        public Album()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         [Key]
         public string Id { get; set; }
 

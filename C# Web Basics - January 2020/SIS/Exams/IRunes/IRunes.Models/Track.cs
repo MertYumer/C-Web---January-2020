@@ -1,9 +1,15 @@
 ﻿namespace IRunes.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class Track
     {
+        public Track()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         [Key]
         public string Id { get; set; }
 

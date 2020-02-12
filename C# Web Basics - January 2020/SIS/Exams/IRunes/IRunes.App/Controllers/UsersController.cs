@@ -41,6 +41,8 @@
             }
 
             var user = ModelMapper.ProjectTo<User>(model);
+            user.Password = this.HashPassword(model.Password);
+
             this.userService.CreateUser(user);
 
             return this.Redirect("/Users/Login");
@@ -77,6 +79,7 @@
         public IActionResult Logout()
         {
             this.SignOut();
+
             return this.Redirect("/");
         }
 
