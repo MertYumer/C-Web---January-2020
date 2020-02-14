@@ -8,7 +8,7 @@
 
         User GetUser(string username, string password);
 
-        string GetUsername(string id);
+        User GetUserById(string userId);
 
         bool UsernameExists(string username);
 

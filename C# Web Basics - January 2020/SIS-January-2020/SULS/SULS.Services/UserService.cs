@@ -42,7 +42,7 @@
             return user;
         }
 
-        public string GetUsername(string id)
+        public User GetUserById(string id)
         {
             var user = this.context.Users.SingleOrDefault(u => u.Id == id);
 
@@ -51,7 +51,7 @@
                 return null;
             }
 
-            return user.Username;
+            return user;
         }
 
         public bool UsernameExists(string username)

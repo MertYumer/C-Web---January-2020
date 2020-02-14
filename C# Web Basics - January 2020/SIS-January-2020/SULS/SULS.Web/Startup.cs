@@ -20,6 +20,8 @@
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUserService, UserService>();
+            serviceCollection.Add<IProblemService, ProblemService>();
+            serviceCollection.Add<ISubmissionService, SubmissionService>();
         }
     }
 }
